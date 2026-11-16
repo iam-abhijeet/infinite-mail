@@ -157,8 +157,57 @@ kbd{font-family:var(--f-mono);font-size:10.5px;padding:1px 6px;border-radius:6px
 .st-top{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-3);margin-bottom:6px}
 .st-bar{height:6px;border-radius:6px;background:var(--line);overflow:hidden}
 .st-bar i{display:block;height:100%;width:32%;border-radius:6px;background:linear-gradient(90deg,var(--accent),#E46A8A)}
-.me{display:flex;align-items:center;gap:10px;padding:6px 4px 8px 8px}
+.me{display:flex;align-items:center;gap:4px;padding:4px 2px 8px 2px}
+.me-btn{display:flex;align-items:center;gap:10px;flex:1;min-width:0;padding:5px 6px;border-radius:14px;text-align:left;transition:background-color .2s}
+.me-btn:hover,.me-btn[aria-expanded="true"]{background:var(--hover)}
+.me-btn .av{transition:transform .4s var(--spring),box-shadow .3s}
+.me-btn:hover .av{transform:translateY(-2px) scale(1.05);box-shadow:0 8px 14px -6px hsl(var(--h) 70% 40% / .6)}
 .me div{flex:1;min-width:0;line-height:1.25}
+.prof-head{display:flex;gap:12px;align-items:center;padding:8px 10px 10px}
+.prof-head div{min-width:0}
+.prof-head b{display:block;font-weight:700;font-size:14px}
+.prof-head small{display:block;color:var(--ink-3);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.plan{display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink)}
+.pop .mi .hint{margin-left:auto;font-size:11px;color:var(--ink-3)}
+.pop:has(.prof-head){min-width:268px}
+.online{position:relative}
+.online::before{content:"";position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 2px var(--glass-2);z-index:1}
+.pm{text-align:center;padding:0;overflow:hidden}
+.pm-cover{height:96px;background:linear-gradient(120deg,var(--accent),#E46A8A 60%,#F2A900)}
+.pm .av{margin:-40px auto 10px;box-shadow:0 0 0 4px var(--glass-2)}
+.pm-body{padding:0 24px 24px}
+.pm h3{margin:0}
+.pm .role{margin:2px 0 0;color:var(--ink-3);font-size:13px}
+.pm-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}
+.pm-stats div{padding:10px 6px;border-radius:14px;background:var(--line)}
+.pm-stats b{display:block;font-size:20px;font-family:var(--f-display);font-weight:400}
+.pm-stats small{color:var(--ink-3);font-size:11.5px}
+.pm dl{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:0 0 20px;text-align:left;font-size:13px}
+.pm dt{color:var(--ink-3)}
+.pm dd{margin:0}
+.form{display:flex;flex-direction:column;gap:14px;margin:6px 0 20px}
+.form label{display:flex;flex-direction:column;gap:6px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.form input,.form textarea{height:40px;border-radius:12px;border:1px solid var(--line-2);background:var(--glass-2);padding:0 12px;outline:none;font-weight:400;font-size:14px;color:var(--ink)}
+.form textarea{height:84px;padding:10px 12px;resize:vertical}
+.form input:focus,.form textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.form .err{color:var(--danger);font-size:12px;font-weight:600}
+.sw-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.sw-row div{flex:1}
+.sw-row b{display:block;font-size:13.5px}
+.sw-row small{color:var(--ink-3);font-size:12px}
+.switch{position:relative;width:42px;height:24px;border-radius:999px;background:var(--line-2);transition:background-color .25s;flex:none}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .35s var(--spring)}
+.switch[aria-checked="true"]{background:var(--accent)}
+.switch[aria-checked="true"]::after{transform:translateX(18px)}
+.app.compact .row-inner{padding-block:8px}
+.app.compact .r3{-webkit-line-clamp:1}
+.signout{position:fixed;inset:0;z-index:140;display:grid;place-items:center;padding:20px;background:var(--bg);animation:fade .4s}
+.signout .aur{position:absolute;inset:0;background:radial-gradient(40vw 40vw at 20% 20%,var(--blob1),transparent 70%),radial-gradient(40vw 40vw at 80% 70%,var(--blob2),transparent 70%);opacity:.7}
+.so-card{position:relative;width:min(380px,100%);padding:34px 28px;border-radius:28px;text-align:center;background:var(--glass);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);border:1px solid var(--glass-line);box-shadow:var(--shadow-pop);animation:popIn .5s var(--spring)}
+.so-card .logo{width:52px;height:52px;margin:0 auto 14px;display:block}
+.so-card h2{margin:0 0 4px;font-family:var(--f-display);font-weight:400;font-size:34px}
+.so-card p{margin:0 0 22px;color:var(--ink-3)}
+.so-card .btn{width:100%;justify-content:center;height:46px}
 .me b{display:block;font-weight:600;font-size:13px}
 .me small{display:block;color:var(--ink-3);font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
@@ -181,6 +230,7 @@ kbd{font-family:var(--f-mono);font-size:10.5px;padding:1px 6px;border-radius:6px
   .app.side-collapsed .nav-sep{font-size:0;height:1px;margin:10px 16px;padding:0;background:var(--line)}
   .app.side-collapsed .nav-sep .mini-btn,.app.side-collapsed #label-new-slot,.app.side-collapsed .storage,.app.side-collapsed .me div,.app.side-collapsed .me [data-act="help"]{display:none}
   .app.side-collapsed .me{flex-direction:column;padding:4px 0 6px;gap:6px}
+  .app.side-collapsed .me-btn{flex:none;padding:4px}
   .app.side-collapsed .side-tg .ic{transform:scaleX(-1)}
 }
 
@@ -229,14 +279,23 @@ kbd{font-family:var(--f-mono);font-size:10.5px;padding:1px 6px;border-radius:6px
 .row-inner:hover{background:var(--hover);transform:translateY(-1px);box-shadow:0 8px 22px -16px rgba(20,24,60,.45)}
 .row.sel .row-inner{background:var(--glass-2);box-shadow:inset 0 0 0 1.5px var(--accent),0 10px 26px -18px var(--accent)}
 .row.checked .row-inner{background:var(--sel)}
-.av-wrap{position:relative;width:40px;height:40px}
-.chk{position:absolute;inset:0;display:grid;place-items:center;border-radius:50%;background:var(--glass-2);border:1.5px solid var(--line-2);opacity:0;transform:scale(.7);transition:opacity .18s,transform .25s var(--spring),background-color .2s;cursor:pointer}
+.av-wrap{position:relative;width:40px;height:40px;perspective:260px}
+.av-wrap .av{position:relative;transform-origin:50% 85%;box-shadow:0 1px 2px rgba(0,0,0,.14);transition:transform .5s var(--spring),box-shadow .35s var(--ease),filter .3s}
+.av-wrap .av::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(155deg,rgba(255,255,255,.5),rgba(255,255,255,0) 55%);opacity:0;transition:opacity .3s}
+.av{text-shadow:0 1px 1px rgba(0,0,0,.2)}
+.chk{position:absolute;inset:0;border-radius:50%;cursor:pointer}
 .chk input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0}
-.chk i{color:transparent;display:grid}
-.has-checked .chk,.chk:focus-within{opacity:1;transform:none}
-@media (hover:hover){.row-inner:hover .chk{opacity:1;transform:none}}
-.row.checked .chk{background:var(--accent);border-color:var(--accent)}
-.row.checked .chk i{color:#fff}
+.chk i{position:absolute;right:-5px;bottom:-5px;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--glass-2);border:1.5px solid var(--line-2);color:transparent;box-shadow:0 3px 8px rgba(0,0,0,.2);opacity:0;transform:scale(.4) translateY(4px);transition:opacity .2s,transform .35s var(--spring),background-color .2s,border-color .2s}
+.chk i svg{width:12px;height:12px}
+.has-checked .chk i,.chk:focus-within i{opacity:1;transform:none}
+@media (hover:hover){
+  .row-inner:hover .av-wrap .av{transform:translateY(-5px) rotateX(18deg) scale(1.08);box-shadow:0 14px 18px -8px hsl(var(--h) 70% 38% / .7),0 2px 4px rgba(0,0,0,.14)}
+  .row-inner:hover .av-wrap .av::after{opacity:1}
+  .row-inner:hover .chk i{opacity:1;transform:none}
+  .row-inner:hover .chk i:hover{border-color:var(--accent)}
+}
+.row.checked .chk i{background:var(--accent);border-color:var(--accent);color:#fff;opacity:1;transform:none}
+.row.checked .av-wrap .av{box-shadow:0 0 0 2px var(--glass-2),0 0 0 4px var(--accent)}
 .row-main{min-width:0}
 .r1{display:flex;align-items:center;gap:6px;min-width:0;height:20px}
 .who{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;color:var(--ink-2)}
@@ -637,7 +696,7 @@ const A={
 };
 
 /* ---------- data ---------- */
-const ME={name:"Aanya Kapoor",email:"aanya@halomail.app"};
+const ME={name:"Aanya Kapoor",email:"aanya@halomail.app",title:"Product Designer",sig:"Aanya Kapoor · Product Designer, Halo"};
 const LABELS=[{id:"work",name:"Work",c:"#6C5CE7"},{id:"clients",name:"Clients",c:"#E8590C"},{id:"personal",name:"Personal",c:"#0CA678"},{id:"travel",name:"Travel",c:"#1C7ED6"},{id:"finance",name:"Finance",c:"#C2255C"}];
 const LCOLORS=["#D6336C","#0B7285","#5F3DC4","#E67700","#2B8A3E","#1971C2"];
 const P={
@@ -712,6 +771,7 @@ const S={view:"inbox",cat:"all",filter:"all",q:"",sel:null,checked:new Set(),sum
 const LAY={listW:380,mode:"split"};
 try{const s=JSON.parse(store.get("halo-layout")||"null");if(s&&typeof s.listW==="number"&&["split","list-hidden","reader-hidden"].includes(s.mode))Object.assign(LAY,s)}catch(_){}
 const saveLay=()=>store.set("halo-layout",JSON.stringify(LAY));
+const PREFS={compact:false,smart:true,notify:true};
 const FOLDERS=[{id:"inbox",name:"Inbox",icon:"inbox"},{id:"starred",name:"Starred",icon:"star"},{id:"important",name:"Important",icon:"flag"},{id:"sent",name:"Sent",icon:"send"},{id:"drafts",name:"Drafts",icon:"pencil-line"},{id:"all",name:"All mail",icon:"mails"},
  {sep:"Categories"},{id:"promotions",name:"Promotions",icon:"megaphone"},{id:"transactions",name:"Transactions",icon:"receipt"},{id:"social",name:"Social",icon:"users"},{id:"updates",name:"Updates",icon:"bell"},
  {sep:"More"},{id:"spam",name:"Spam",icon:"shield-alert"},{id:"trash",name:"Trash",icon:"trash-2"}];
@@ -768,7 +828,7 @@ function renderSidebar(){
   for(const l of LABELS){const k="label:"+l.id,n=c[k]||0;h+=`<button class="nav-item ${S.view===k&&!S.q?"on":""}" data-act="nav" data-view="${k}" title="${esc(l.name)}"><i class="dot" style="--c:${l.c}"></i><span>${esc(l.name)}</span>${n?`<b class="count muted" data-k="${k}">${n}</b>`:""}</button>`}
   h+=`</nav><div class="side-foot"><div class="storage"><div class="st-top"><span>Storage</span><span class="mono">4.8 GB of 15 GB</span></div><div class="st-bar"><i></i></div></div>
   <button class="nav-item side-tg hide-s" data-act="toggle-side" title="${app.classList.contains("side-collapsed")?"Expand":"Collapse"} sidebar ( [ )">${ic("panel-left-close")}<span>${app.classList.contains("side-collapsed")?"Expand":"Collapse"} sidebar</span></button>
-  <div class="me">${av(ME,34)}<div><b>${esc(ME.name)}</b><small>${esc(ME.email)}</small></div><button class="icon-btn sm" data-act="theme" aria-label="Switch theme">${ic(isDark()?"sun":"moon",17)}</button><button class="icon-btn sm hide-s" data-act="help" aria-label="Keyboard shortcuts">${ic("keyboard",17)}</button></div></div>`;
+  <div class="me"><button class="me-btn" data-act="profile" aria-haspopup="menu" aria-expanded="false" title="Your account"><span class="online">${av(ME,34)}</span><div><b>${esc(ME.name)}</b><small>${esc(ME.email)}</small></div></button><button class="icon-btn sm" data-act="theme" aria-label="Switch theme">${ic(isDark()?"sun":"moon",17)}</button><button class="icon-btn sm hide-s" data-act="help" aria-label="Keyboard shortcuts">${ic("keyboard",17)}</button></div></div>`;
   const st=$("#nav")?$("#nav").scrollTop:0;
   side.innerHTML=h;$("#nav").scrollTop=st;
   $$(".count[data-k]",side).forEach(el=>{const k=el.dataset.k;if(prevCounts[k]!==undefined&&prevCounts[k]!==c[k])el.classList.add("bump")});
@@ -868,7 +928,7 @@ function renderReader(){
       <div class="s-acts"><button class="star ${m.starred?"on":""}" data-act="star" data-id="${m.id}" aria-label="${m.starred?"Unstar":"Star"}" aria-pressed="${m.starred}">${ic("star",18)}</button><button class="icon-btn sm" data-act="reply" data-id="${m.id}" aria-label="Reply" title="Reply (R)">${ic("reply",18)}</button></div></div>
     ${aiCard}
     <div class="body">${sanitize(m.body)}</div>${attHtml}
-    ${f!=="spam"&&f!=="trash"?`<div class="replies">${smart.map(t=>`<button class="chip smart" data-act="smart" data-id="${m.id}" data-text="${esc(t)}">${ic("sparkles",14)}${esc(t)}</button>`).join("")}</div>
+    ${f!=="spam"&&f!=="trash"?`<div class="replies" ${PREFS.smart?"":"hidden"}>${smart.map(t=>`<button class="chip smart" data-act="smart" data-id="${m.id}" data-text="${esc(t)}">${ic("sparkles",14)}${esc(t)}</button>`).join("")}</div>
     <div class="reply-row"><button class="btn ghost" data-act="reply" data-id="${m.id}">${ic("reply",17)}Reply</button>${(m.cc.length||m.to.length>1)?`<button class="btn ghost" data-act="replyall" data-id="${m.id}">${ic("reply-all",17)}Reply all</button>`:""}<button class="btn ghost" data-act="forward" data-id="${m.id}">${ic("forward",17)}Forward</button></div>`:""}
   </article></div>`;
   if(keep)$(".r-scroll",reader).scrollTop=keep;
@@ -902,7 +962,7 @@ function toast(msg,o={}){const t=document.createElement("div");t.className="toas
   return {close:()=>{clearTimeout(timer);close()},el:t};
 }
 let popEl=null;
-function closePop(){if(popEl){popEl.remove();popEl=null}}
+function closePop(){if(popEl){popEl.remove();popEl=null}$$('.me-btn[aria-expanded="true"]').forEach(b=>b.setAttribute("aria-expanded","false"))}
 function popover(anchor,html,onClick){closePop();const p=document.createElement("div");p.className="pop";p.innerHTML=html;$("#pop-root").appendChild(p);popEl=p;
   const r=anchor.getBoundingClientRect();const pw=p.offsetWidth,ph=p.offsetHeight;let x=r.left,y=r.bottom+6;if(x+pw>innerWidth-12)x=innerWidth-pw-12;if(y+ph>innerHeight-12){y=r.top-ph-6;p.style.transformOrigin="bottom left"}
   p.style.left=Math.max(12,x)+"px";p.style.top=Math.max(12,y)+"px";p.addEventListener("click",e=>onClick&&onClick(e,p));return p}
@@ -962,6 +1022,50 @@ function morePop(btn,id){const m=byId(id);popover(btn,`<button class="mi" data-k
   else if(k==="fwd")forward(m);
   else if(k==="block"){toast(`${m.from.name} blocked. Future mail goes to Spam.`,{icon:"ban",undo:()=>toast("Unblocked",{icon:"check-circle-2",ms:2000})})}
   else toast("That's not part of this demo",{icon:"info",ms:2500})})}
+
+/* ---------- account: profile menu, profile, settings, sign out ---------- */
+function modal(html,cls){const w=document.createElement("div");w.className="modal-wrap";w.innerHTML=`<div class="modal ${cls||""}" role="dialog" aria-modal="true">${html}</div>`;$("#modal-root").appendChild(w);
+  const kd=e=>{if(e.key==="Escape"){e.stopPropagation();close()}};const close=()=>{w.remove();document.removeEventListener("keydown",kd,true)};
+  document.addEventListener("keydown",kd,true);w.addEventListener("click",e=>{if(e.target===w)close()});return {w,close}}
+function profileMenu(btn){
+  if(popEl&&popEl.dataset.for==="profile"){closePop();return}
+  const dark=isDark();
+  const p=popover(btn,`<div class="prof-head"><span class="online">${av(ME,44)}</span><div><b>${esc(ME.name)}</b><small>${esc(ME.email)}</small><span class="plan">${ic("sparkles",11)}Pro plan</span></div></div><hr>
+    <button class="mi" data-k="view">${ic("user",16)}View profile</button>
+    <button class="mi" data-k="edit">${ic("pencil",16)}Edit profile</button>
+    <button class="mi" data-k="settings">${ic("settings",16)}Settings</button>
+    <button class="mi" data-k="switch">${ic("users",16)}Switch account</button>
+    <button class="mi" data-k="theme">${ic(dark?"sun":"moon",16)}${dark?"Light":"Dark"} mode</button>
+    <button class="mi" data-k="keys">${ic("keyboard",16)}Keyboard shortcuts<span class="hint">?</span></button>
+    <hr><button class="mi danger" data-k="logout">${ic("log-out",16)}Sign out</button>`,(e)=>{
+    const b=e.target.closest("[data-k]");if(!b)return;closePop();const k=b.dataset.k;const r=btn.getBoundingClientRect();
+    if(k==="view")viewProfile();else if(k==="edit")editProfile();else if(k==="settings")openSettings();
+    else if(k==="switch")toast("Only one account is set up in this demo",{icon:"users",ms:2600});
+    else if(k==="theme")toggleTheme({clientX:r.left+24,clientY:r.top+20});else if(k==="keys")showHelp();else if(k==="logout")signOut()});
+  p.dataset.for="profile";btn.setAttribute("aria-expanded","true");$(".mi",p).focus();
+}
+function viewProfile(){const sent=M.filter(m=>m.folder==="sent").length,total=M.filter(m=>m.folder!=="trash").length;
+  const {w,close}=modal(`<div class="pm-cover"></div>${av(ME,84)}<div class="pm-body"><h3>${esc(ME.name)}</h3><p class="role">${esc(ME.title)} · ${esc(ME.email)}</p>
+    <div class="pm-stats"><div><b>${total}</b><small>Conversations</small></div><div><b>${sent}</b><small>Sent</small></div><div><b>${LABELS.length}</b><small>Labels</small></div></div>
+    <dl><dt>Location</dt><dd>Pune, India</dd><dt>Time zone</dt><dd>India Standard Time</dd><dt>Plan</dt><dd>Pro · 15 GB storage</dd><dt>Signature</dt><dd>${esc(ME.sig||"None")}</dd></dl>
+    <div class="acts"><button class="btn ghost" data-r="edit">${ic("pencil",15)}Edit profile</button><button class="btn primary" data-r="ok">Done</button></div></div>`,"pm");
+  w.addEventListener("click",e=>{const b=e.target.closest("[data-r]");if(!b)return;close();if(b.dataset.r==="edit")editProfile()})}
+function editProfile(){const {w,close}=modal(`<h3>Edit profile</h3><p>Changes show across the mailbox right away.</p>
+  <form class="form" id="pf" novalidate><label>Full name<input id="pf-name" value="${esc(ME.name)}" maxlength="40" autocomplete="name"></label><span class="err" id="pf-err" hidden>Enter your name to save.</span>
+  <label>Job title<input id="pf-title" value="${esc(ME.title)}" maxlength="40"></label><label>Email signature<textarea id="pf-sig" maxlength="200">${esc(ME.sig)}</textarea></label>
+  <div class="acts"><button type="button" class="btn ghost" data-r="cancel">Cancel</button><button type="submit" class="btn primary">Save changes</button></div></form>`);
+  const nm=$("#pf-name",w);nm.focus();nm.select();nm.addEventListener("input",()=>$("#pf-err",w).hidden=true);
+  w.addEventListener("click",e=>{if(e.target.closest("[data-r='cancel']"))close()});
+  $("#pf",w).addEventListener("submit",e=>{e.preventDefault();const n=nm.value.trim();if(!n){$("#pf-err",w).hidden=false;nm.focus();return}
+    ME.name=n;ME.title=$("#pf-title",w).value.trim()||"Member";ME.sig=$("#pf-sig",w).value.trim();close();renderAll();toast("Profile updated",{icon:"check-circle-2",ms:2400})})}
+function openSettings(){const row=(k,t,s)=>`<div class="sw-row"><div><b>${t}</b><small>${s}</small></div><button class="switch" role="switch" aria-checked="${PREFS[k]}" data-sw="${k}" aria-label="${t}"></button></div>`;
+  const {w,close}=modal(`<h3>Settings</h3><p>Quick preferences for this demo.</p>${row("compact","Compact list","Show more messages with tighter rows.")}${row("smart","Smart replies","Suggest short replies under each message.")}${row("notify","Desktop notifications","Get notified when new mail arrives.")}<div class="acts" style="margin-top:20px"><button class="btn primary" data-r="ok">Done</button></div>`);
+  w.addEventListener("click",e=>{const s=e.target.closest("[data-sw]");if(s){const k=s.dataset.sw;PREFS[k]=!PREFS[k];s.setAttribute("aria-checked",PREFS[k]);app.classList.toggle("compact",PREFS.compact);renderReader();return}if(e.target.closest("[data-r]"))close()})}
+async function signOut(){const ok=await ask({title:"Sign out?",text:"You'll see the sign-in screen. Nothing is lost in this demo.",ok:"Sign out"});if(!ok)return;
+  if(C)closeCompose("save");
+  const d=document.createElement("div");d.className="signout";d.innerHTML=`<div class="aur"></div><div class="so-card">${LOGO}<h2>You're signed out</h2><p>${esc(ME.email)}</p><button class="btn primary" data-so="in">${ic("log-in",17)}Sign in again</button></div>`;
+  document.body.appendChild(d);const b=$("[data-so]",d);b.focus();
+  b.addEventListener("click",()=>{d.style.animation="fade .3s reverse forwards";setTimeout(()=>d.remove(),280);toast(`Welcome back, ${ME.name.split(" ")[0]}`,{icon:"smile",ms:2600})})}
 
 /* ---------- compose ---------- */
 let C=null;let saveTimer=null;
@@ -1143,7 +1247,7 @@ function vGo(i){V.i=(i+V.list.length)%V.list.length;V.zoom=1;V.tx=V.ty=0;renderV
 
 /* ---------- events ---------- */
 document.addEventListener("click",async e=>{
-  if(popEl&&!e.target.closest(".pop")&&!e.target.closest("[data-act='move'],[data-act='labels'],[data-act='more'],[data-act='c-link'],[data-act='c-emoji']"))closePop();
+  if(popEl&&!e.target.closest(".pop")&&!e.target.closest("[data-act='move'],[data-act='labels'],[data-act='more'],[data-act='c-link'],[data-act='c-emoji'],[data-act='profile']"))closePop();
   const t=e.target.closest("[data-act]");if(!t)return;const a=t.dataset.act;const id=t.dataset.id;
   if(t.disabled)return;
   switch(a){
@@ -1177,6 +1281,7 @@ document.addEventListener("click",async e=>{
     case "close-mail":closeMail();break;
     case "toggle-list":LAY.mode=LAY.mode==="list-hidden"?"split":"list-hidden";saveLay();applyLayout();renderReader();setTimeout(reslide,520);break;
     case "toggle-side":toggleSide();break;
+    case "profile":profileMenu(t);break;
     case "prev":case "next":{const arr=viewMails();const i=arr.findIndex(m=>m.id===S.sel);const n=arr[i+(a==="next"?1:-1)];if(n)openMail(n.id);break}
     case "summarize":{if(S.summary[id]){delete S.summary[id];renderReader();break}S.summary[id]="loading";renderReader();await wait(reduced?0:1100);if(S.summary[id]!=="loading")break;S.summary[id]="done";if(S.sel===id){renderReader();typeSummary()}break}
     case "reply":reply(byId(id),false);break;
@@ -1232,7 +1337,7 @@ async function typeSummary(){const items=$$("#ai-card li");if(reduced)return;con
 /* keyboard */
 document.addEventListener("keydown",e=>{
   if(V){if(e.key==="Escape")closeViewer();if(e.key==="ArrowRight"&&V.list.length>1)vGo(V.i+1);if(e.key==="ArrowLeft"&&V.list.length>1)vGo(V.i-1);if(e.key==="+"||e.key==="=")zoom(1);if(e.key==="-")zoom(-1);return}
-  if($(".modal-wrap"))return;
+  if($(".modal-wrap")||$(".signout"))return;
   if(e.key==="Escape"){if(popEl)return closePop();if(C&&$("#compose").dataset.state==="max"){$("#compose").dataset.state="normal";$(".c-scrim")&&$(".c-scrim").remove();return}if(app.classList.contains("drawer"))return app.classList.remove("drawer");if(S.checked.size){S.checked.clear();renderList();return}if(S.q&&document.activeElement.id==="q"){S.q="";renderAll();return}if(S.sel)closeMail();return}
   if((e.metaKey||e.ctrlKey)&&e.key==="Enter"&&C){e.preventDefault();sendCompose();return}
   const tg=e.target;if(tg.closest&&tg.closest("input,textarea,[contenteditable='true']"))return;if(e.metaKey||e.ctrlKey||e.altKey)return;

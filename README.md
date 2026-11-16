@@ -18,6 +18,8 @@ A clickable mailbox UI/UX concept. It's a static demo built to pitch the design:
 - **Drafts:** saved automatically. Sending plays a send animation and offers Undo.
 - **Actions:** archive, delete, restore, delete forever, spam / not spam, move, mark read or unread, bulk select and empty trash
 - **Star = Important:** starring a message also marks it important, and unstarring removes it from both
+- **Account menu:** click your avatar for View profile, Edit profile (name, title, signature), Settings (compact list, smart replies), theme, shortcuts and Sign out
+- **3D avatars:** list avatars lift and tilt on hover, with a small corner badge for selecting
 - **AI Summarize:** a canned summary shown with a typing effect
 - **Refresh:** delivers a new message the first time
 - **Motion and UI:** frosted-glass panels, drifting background, ripple buttons, staggered list animations, swipe actions on touch, toasts with Undo
