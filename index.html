@@ -127,7 +127,7 @@ kbd{font-family:var(--f-mono);font-size:10.5px;padding:1px 6px;border-radius:6px
 /* sidebar */
 .side{display:flex;flex-direction:column;min-height:0;min-width:0;padding:6px 4px 0;overflow:hidden}
 .brand{display:flex;align-items:center;gap:10px;padding:6px 10px 18px}
-.brand .logo{width:34px;height:34px}
+.brand .logo{width:34px;height:34px;flex:none}
 .brand-name{font-family:var(--f-display);font-size:28px;line-height:1;letter-spacing:-.01em}
 .brand-name em{font-style:italic;color:var(--accent-ink)}
 .compose-btn{width:100%;height:50px;justify-content:flex-start;padding:0 16px;border-radius:16px;font-size:14.5px;background:var(--accent);color:var(--on-accent);box-shadow:0 14px 30px -12px var(--accent)}
@@ -135,7 +135,8 @@ kbd{font-family:var(--f-mono);font-size:10.5px;padding:1px 6px;border-radius:6px
 .compose-btn::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.35) 50%,transparent 65%);transform:translateX(-120%);transition:transform .8s var(--ease)}
 .compose-btn:hover::after{transform:translateX(120%)}
 .compose-btn:hover{transform:translateY(-1px)}
-.nav{position:relative;flex:1;overflow:auto;margin-top:14px;padding:2px 2px 12px;scrollbar-width:thin}
+.nav{position:relative;flex:1;overflow-x:hidden;overflow-y:auto;margin-top:14px;padding:2px 2px 12px;scrollbar-width:thin;scrollbar-color:transparent transparent;transition:padding .45s var(--ease)}
+.nav:hover{scrollbar-color:var(--line-2) transparent}
 .nav-pill{position:absolute;left:2px;right:2px;top:0;height:38px;border-radius:12px;background:var(--glass-2);box-shadow:0 1px 2px rgba(20,24,60,.06),0 6px 18px -10px rgba(20,24,60,.25);border:1px solid var(--glass-line);pointer-events:none;transition:transform .42s var(--spring),height .3s var(--ease)}
 .nav-item{position:relative;z-index:1;display:flex;align-items:center;gap:12px;width:100%;height:38px;padding:0 12px;border-radius:12px;color:var(--ink-2);font-weight:500;text-align:left}
 .nav-item:hover{color:var(--ink);background:var(--hover)}
@@ -163,15 +164,19 @@ kbd{font-family:var(--f-mono);font-size:10.5px;padding:1px 6px;border-radius:6px
 
 /* collapsible sidebar */
 .brand,.me{transition:padding .45s var(--ease),gap .45s var(--ease)}
-.compose-btn,.nav-item{transition:padding .45s var(--ease),transform .18s var(--spring),background-color .2s,color .2s,box-shadow .2s}
+.compose-btn,.nav-item{transition:padding .45s var(--ease),width .45s var(--ease),height .45s var(--ease),margin .45s var(--ease),border-radius .45s var(--ease),transform .18s var(--spring),background-color .2s,color .2s,box-shadow .2s}
+.nav-pill{transition:transform .42s var(--spring),height .3s var(--ease),left .45s var(--ease),right .45s var(--ease)}
 .brand-name,.nav-item>span,.compose-btn span,.compose-btn kbd{transition:opacity .25s var(--ease)}
 .side-tg .ic{transition:transform .45s var(--spring)}
 @media (min-width:781px){
   .app.side-collapsed .brand{padding-left:17px}
   .app.side-collapsed .brand-name,.app.side-collapsed .nav-item>span,.app.side-collapsed .compose-btn span,.app.side-collapsed .compose-btn kbd{opacity:0;pointer-events:none}
-  .app.side-collapsed .compose-btn{padding-left:25px}
-  .app.side-collapsed .nav-item{padding-left:23px}
-  .app.side-collapsed .nav-item .count{position:absolute;top:1px;left:33px;min-width:18px;height:18px;padding:0 4px;font-size:9.5px;box-shadow:0 0 0 2px var(--bg-2);animation:bump .45s var(--spring)}
+  .app.side-collapsed .compose-btn{width:52px;height:52px;margin-left:8px;padding-left:17px;border-radius:18px}
+  .app.side-collapsed .nav{padding:2px 0 12px;scrollbar-width:none}
+  .app.side-collapsed .nav::-webkit-scrollbar{display:none}
+  .app.side-collapsed .nav-pill{left:8px;right:8px}
+  .app.side-collapsed .nav-item{width:52px;height:44px;margin-left:8px;padding-left:17px;border-radius:14px}
+  .app.side-collapsed .nav-item .count{position:absolute;top:4px;left:27px;min-width:18px;height:18px;padding:0 5px;font-size:9.5px;box-shadow:0 0 0 2px var(--bg-2);animation:bump .45s var(--spring)}
   .app.side-collapsed .nav-item .count.muted{background:var(--ink-3);color:var(--bg-2)}
   .app.side-collapsed .nav-sep{font-size:0;height:1px;margin:10px 16px;padding:0;background:var(--line)}
   .app.side-collapsed .nav-sep .mini-btn,.app.side-collapsed #label-new-slot,.app.side-collapsed .storage,.app.side-collapsed .me div,.app.side-collapsed .me [data-act="help"]{display:none}
@@ -228,7 +233,8 @@ kbd{font-family:var(--f-mono);font-size:10.5px;padding:1px 6px;border-radius:6px
 .chk{position:absolute;inset:0;display:grid;place-items:center;border-radius:50%;background:var(--glass-2);border:1.5px solid var(--line-2);opacity:0;transform:scale(.7);transition:opacity .18s,transform .25s var(--spring),background-color .2s;cursor:pointer}
 .chk input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0}
 .chk i{color:transparent;display:grid}
-.row-inner:hover .chk,.has-checked .chk,.chk:focus-within{opacity:1;transform:none}
+.has-checked .chk,.chk:focus-within{opacity:1;transform:none}
+@media (hover:hover){.row-inner:hover .chk{opacity:1;transform:none}}
 .row.checked .chk{background:var(--accent);border-color:var(--accent)}
 .row.checked .chk i{color:#fff}
 .row-main{min-width:0}
@@ -240,9 +246,11 @@ kbd{font-family:var(--f-mono);font-size:10.5px;padding:1px 6px;border-radius:6px
 .imp{color:var(--warn);display:inline-grid}
 .r1 time{font-size:11.5px;color:var(--ink-3);white-space:nowrap;font-variant-numeric:tabular-nums}
 .row.unread .r1 time{color:var(--accent-ink);font-weight:600}
-.row-acts{display:none;gap:2px;margin-right:-4px}
-.row-inner:hover .row-acts{display:flex}
-.row-inner:hover .r1 time{display:none}
+.row-acts{display:none;gap:2px;margin-right:-4px;flex:none}
+@media (hover:hover){
+  .row-inner:hover .row-acts{display:flex}
+  .row-inner:hover .r1 time{display:none}
+}
 .row-acts .icon-btn{width:26px;height:26px;border-radius:8px}
 .r2{margin-top:2px;font-size:13.5px;font-weight:500;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .row.unread .r2{color:var(--ink);font-weight:600}
@@ -257,7 +265,7 @@ kbd{font-family:var(--f-mono);font-size:10.5px;padding:1px 6px;border-radius:6px
 .star:hover{color:var(--star);transform:scale(1.12)}
 .star.on{color:var(--star)}
 .star.on svg{fill:var(--star)}
-.star.pop svg{animation:starpop .5s var(--spring)}
+.star.star-pop svg{animation:starpop .5s var(--spring)}
 @keyframes starpop{0%{transform:scale(.4) rotate(-40deg)}60%{transform:scale(1.35) rotate(10deg)}100%{transform:none}}
 mark{background:var(--mark);color:inherit;border-radius:4px;padding:0 2px}
 
@@ -503,7 +511,8 @@ mark{background:var(--mark);color:inherit;border-radius:4px;padding:0 2px}
   .only-t{display:inline-grid}
 }
 @media (max-width:780px){
-  .app{grid-template-columns:minmax(0,1fr);gap:0;padding-block:10px}
+  .app{grid-template-columns:minmax(0,1fr);gap:0;padding-block:10px;z-index:auto}
+  .list,.reader{position:relative;z-index:1}
   .side{position:fixed;z-index:60;top:0;bottom:0;left:0;width:min(300px,86vw);padding:calc(14px + env(safe-area-inset-top,0px)) 12px calc(10px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));background:var(--glass-2);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);border-right:1px solid var(--glass-line);box-shadow:var(--shadow-pop);transform:translateX(-105%);transition:transform .45s var(--spring)}
   .app.drawer .side{transform:none}
   .scrim{display:block;position:fixed;inset:0;z-index:55;background:var(--scrim);opacity:0;pointer-events:none;transition:opacity .3s}
@@ -925,7 +934,7 @@ async function act_forever(ids){const ok=await ask({title:ids.length===1?"Delete
 async function toggleStar(id){const m=byId(id);if(!m)return;const on=!m.starred;
   if(!on&&(S.view==="starred"||S.view==="important")&&!S.q)await animateOut([id]);
   m.starred=on;m.important=on;renderAll();
-  if(on&&!reduced)$$(`.star[data-id="${id}"]`).forEach(b=>b.classList.add("pop"));
+  if(on&&!reduced)$$(`.star[data-id="${id}"]`).forEach(b=>b.classList.add("star-pop"));
   toast(on?"Starred and marked important":"Removed from Starred and Important",{icon:on?"star":"star-off",ms:2800,undo:()=>{m.starred=!on;m.important=!on;renderAll()}})}
 function openMail(id){const m=byId(id);if(!m)return;if(m.folder==="drafts"){openCompose({draft:m});return}
   if(LAY.mode==="reader-hidden"&&innerWidth>1180){LAY.mode="split";saveLay();applyLayout();setTimeout(reslide,520)}
