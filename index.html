@@ -88,7 +88,20 @@ input,textarea{font:inherit;color:inherit}
 @keyframes drift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(4vw,3vh) scale(1.08)}100%{transform:translate(-3vw,5vh) scale(.95)}}
 
 /* shell */
-.app{position:relative;z-index:1;height:100%;display:grid;grid-template-columns:248px minmax(330px,410px) minmax(0,1fr);gap:14px;padding-block:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.app{position:relative;z-index:1;height:100%;display:grid;--side-w:248px;--list-w:380px;grid-template-columns:var(--side-w) var(--list-w) minmax(0,1fr);gap:14px;padding-block:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));transition:grid-template-columns .5s var(--ease)}
+.app.side-collapsed{--side-w:76px}
+.app.resizing{transition:none;cursor:col-resize;user-select:none}
+.app.resizing *{cursor:col-resize!important}
+.resizer{position:absolute;z-index:6;top:14px;bottom:14px;width:14px;left:calc(max(16px,env(safe-area-inset-left,0px)) + var(--side-w) + 14px + var(--list-w));cursor:col-resize;display:grid;place-items:center;touch-action:none;transition:left .5s var(--ease)}
+.app.resizing .resizer{transition:none}
+.resizer i{width:4px;height:40px;border-radius:4px;background:var(--line-2);transition:height .3s var(--spring),background-color .2s,box-shadow .2s}
+.resizer:hover i,.resizer:focus-visible i,.app.resizing .resizer i{height:96px;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.resizer:focus-visible{outline:none}
+.list,.reader{transition:opacity .35s var(--ease),transform .5s var(--ease)}
+.app.list-hidden .list,.app.reader-hidden .reader{opacity:0;pointer-events:none}
+.app.list-hidden .list{transform:translateX(-30px) scale(.97)}
+.app.reader-hidden .reader{transform:translateX(30px) scale(.97)}
+.app.will-hide-list .list,.app.will-hide-reader .reader{opacity:.35;transform:scale(.985)}
 .pane{min-height:0;min-width:0;display:flex;flex-direction:column;background:var(--glass);-webkit-backdrop-filter:blur(26px) saturate(1.5);backdrop-filter:blur(26px) saturate(1.5);border:1px solid var(--glass-line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}
 
 /* buttons & ripple */
@@ -112,7 +125,7 @@ input,textarea{font:inherit;color:inherit}
 kbd{font-family:var(--f-mono);font-size:10.5px;padding:1px 6px;border-radius:6px;border:1px solid currentColor;opacity:.6}
 
 /* sidebar */
-.side{display:flex;flex-direction:column;min-height:0;padding:6px 4px 0}
+.side{display:flex;flex-direction:column;min-height:0;min-width:0;padding:6px 4px 0;overflow:hidden}
 .brand{display:flex;align-items:center;gap:10px;padding:6px 10px 18px}
 .brand .logo{width:34px;height:34px}
 .brand-name{font-family:var(--f-display);font-size:28px;line-height:1;letter-spacing:-.01em}
@@ -147,6 +160,24 @@ kbd{font-family:var(--f-mono);font-size:10.5px;padding:1px 6px;border-radius:6px
 .me div{flex:1;min-width:0;line-height:1.25}
 .me b{display:block;font-weight:600;font-size:13px}
 .me small{display:block;color:var(--ink-3);font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* collapsible sidebar */
+.brand,.me{transition:padding .45s var(--ease),gap .45s var(--ease)}
+.compose-btn,.nav-item{transition:padding .45s var(--ease),transform .18s var(--spring),background-color .2s,color .2s,box-shadow .2s}
+.brand-name,.nav-item>span,.compose-btn span,.compose-btn kbd{transition:opacity .25s var(--ease)}
+.side-tg .ic{transition:transform .45s var(--spring)}
+@media (min-width:781px){
+  .app.side-collapsed .brand{padding-left:17px}
+  .app.side-collapsed .brand-name,.app.side-collapsed .nav-item>span,.app.side-collapsed .compose-btn span,.app.side-collapsed .compose-btn kbd{opacity:0;pointer-events:none}
+  .app.side-collapsed .compose-btn{padding-left:25px}
+  .app.side-collapsed .nav-item{padding-left:23px}
+  .app.side-collapsed .nav-item .count{position:absolute;top:1px;left:33px;min-width:18px;height:18px;padding:0 4px;font-size:9.5px;box-shadow:0 0 0 2px var(--bg-2);animation:bump .45s var(--spring)}
+  .app.side-collapsed .nav-item .count.muted{background:var(--ink-3);color:var(--bg-2)}
+  .app.side-collapsed .nav-sep{font-size:0;height:1px;margin:10px 16px;padding:0;background:var(--line)}
+  .app.side-collapsed .nav-sep .mini-btn,.app.side-collapsed #label-new-slot,.app.side-collapsed .storage,.app.side-collapsed .me div,.app.side-collapsed .me [data-act="help"]{display:none}
+  .app.side-collapsed .me{flex-direction:column;padding:4px 0 6px;gap:6px}
+  .app.side-collapsed .side-tg .ic{transform:scaleX(-1)}
+}
 
 /* avatars */
 .av{flex:none;display:inline-grid;place-items:center;border-radius:50%;color:#fff;font-weight:600;letter-spacing:.02em;background:linear-gradient(135deg,hsl(var(--h) 72% 62%),hsl(calc(var(--h) + 38) 70% 50%))}
@@ -464,7 +495,8 @@ mark{background:var(--mark);color:inherit;border-radius:4px;padding:0 2px}
 .only-m,.only-t{display:none}
 
 @media (max-width:1180px){
-  .app{grid-template-columns:232px minmax(0,1fr)}
+  .app{--side-w:232px;grid-template-columns:var(--side-w) minmax(0,1fr)}
+  .resizer,.hide-t{display:none!important}
   .reader{display:none}
   .app.reading .list{display:none}
   .app.reading .reader{display:flex}
@@ -500,6 +532,7 @@ mark{background:var(--mark);color:inherit;border-radius:4px;padding:0 2px}
   <aside class="side" id="side" aria-label="Folders"></aside>
   <section class="pane list" id="list" aria-label="Messages"></section>
   <section class="pane reader" id="reader" aria-label="Reading pane"></section>
+  <div class="resizer" id="resizer" role="separator" aria-orientation="vertical" aria-label="Resize message list. Drag far left or right to hide a pane, double-click to reset." tabindex="0" title="Drag to resize · double-click to reset"><i></i></div>
 </div>
 <div class="scrim" id="scrim" data-act="drawer-close"></div>
 <button class="fab btn" data-act="compose" aria-label="Compose"></button>
@@ -667,6 +700,9 @@ mk({folder:"trash",prevFolder:"inbox",from:P.dev,subject:"Re: old invoice",time:
 
 /* ---------- state ---------- */
 const S={view:"inbox",cat:"all",filter:"all",q:"",sel:null,checked:new Set(),summary:{},showDetails:false,refreshed:0};
+const LAY={listW:380,mode:"split"};
+try{const s=JSON.parse(store.get("halo-layout")||"null");if(s&&typeof s.listW==="number"&&["split","list-hidden","reader-hidden"].includes(s.mode))Object.assign(LAY,s)}catch(_){}
+const saveLay=()=>store.set("halo-layout",JSON.stringify(LAY));
 const FOLDERS=[{id:"inbox",name:"Inbox",icon:"inbox"},{id:"starred",name:"Starred",icon:"star"},{id:"important",name:"Important",icon:"flag"},{id:"sent",name:"Sent",icon:"send"},{id:"drafts",name:"Drafts",icon:"pencil-line"},{id:"all",name:"All mail",icon:"mails"},
  {sep:"Categories"},{id:"promotions",name:"Promotions",icon:"megaphone"},{id:"transactions",name:"Transactions",icon:"receipt"},{id:"social",name:"Social",icon:"users"},{id:"updates",name:"Updates",icon:"bell"},
  {sep:"More"},{id:"spam",name:"Spam",icon:"shield-alert"},{id:"trash",name:"Trash",icon:"trash-2"}];
@@ -718,10 +754,11 @@ function renderSidebar(){
   let h=`<div class="brand">${LOGO}<div class="brand-name">Halo <em>mail</em></div><span style="flex:1"></span><button class="icon-btn only-m" data-act="drawer-close" aria-label="Close menu">${ic("x")}</button></div>
   <button class="btn compose-btn" data-act="compose">${ic("square-pen",18)}<span>Compose</span><kbd>C</kbd></button><nav class="nav" id="nav"><div class="nav-pill" id="nav-pill"></div>`;
   for(const f of FOLDERS){if(f.sep){h+=`<div class="nav-sep">${f.sep}</div>`;continue}const n=c[f.id]||0;
-    h+=`<button class="nav-item ${S.view===f.id&&!S.q?"on":""}" data-act="nav" data-view="${f.id}">${ic(f.icon)}<span>${f.name}</span>${n?`<b class="count ${f.id==="drafts"||f.id==="spam"||CATS.includes(f.id)?"muted":""}" data-k="${f.id}">${n}</b>`:""}</button>`}
+    h+=`<button class="nav-item ${S.view===f.id&&!S.q?"on":""}" data-act="nav" data-view="${f.id}" title="${f.name}${n?" ("+n+")":""}">${ic(f.icon)}<span>${f.name}</span>${n?`<b class="count ${f.id==="drafts"||f.id==="spam"||CATS.includes(f.id)?"muted":""}" data-k="${f.id}">${n}</b>`:""}</button>`}
   h+=`<div class="nav-sep">Labels <button class="mini-btn" data-act="new-label" aria-label="Create label">${ic("plus",15)}</button></div><div id="label-new-slot"></div>`;
-  for(const l of LABELS){const k="label:"+l.id,n=c[k]||0;h+=`<button class="nav-item ${S.view===k&&!S.q?"on":""}" data-act="nav" data-view="${k}"><i class="dot" style="--c:${l.c}"></i><span>${esc(l.name)}</span>${n?`<b class="count muted" data-k="${k}">${n}</b>`:""}</button>`}
+  for(const l of LABELS){const k="label:"+l.id,n=c[k]||0;h+=`<button class="nav-item ${S.view===k&&!S.q?"on":""}" data-act="nav" data-view="${k}" title="${esc(l.name)}"><i class="dot" style="--c:${l.c}"></i><span>${esc(l.name)}</span>${n?`<b class="count muted" data-k="${k}">${n}</b>`:""}</button>`}
   h+=`</nav><div class="side-foot"><div class="storage"><div class="st-top"><span>Storage</span><span class="mono">4.8 GB of 15 GB</span></div><div class="st-bar"><i></i></div></div>
+  <button class="nav-item side-tg hide-s" data-act="toggle-side" title="${app.classList.contains("side-collapsed")?"Expand":"Collapse"} sidebar ( [ )">${ic("panel-left-close")}<span>${app.classList.contains("side-collapsed")?"Expand":"Collapse"} sidebar</span></button>
   <div class="me">${av(ME,34)}<div><b>${esc(ME.name)}</b><small>${esc(ME.email)}</small></div><button class="icon-btn sm" data-act="theme" aria-label="Switch theme">${ic(isDark()?"sun":"moon",17)}</button><button class="icon-btn sm hide-s" data-act="help" aria-label="Keyboard shortcuts">${ic("keyboard",17)}</button></div></div>`;
   const st=$("#nav")?$("#nav").scrollTop:0;
   side.innerHTML=h;$("#nav").scrollTop=st;
@@ -789,10 +826,12 @@ function skeleton(){const r=$("#rows");if(!r)return;r.innerHTML=Array.from({leng
 /* ---------- render: reader ---------- */
 function renderReader(){
   const m=S.sel&&byId(S.sel);
-  if(!m||m.folder==="drafts"){reader.innerHTML=`<div class="r-empty"><div class="envelope"><div class="b"></div><div class="f"></div><div class="s">${ic("star",16,2.4)}</div></div><h2>Pick a message</h2><p>Choose something from the list to read it here, or start a fresh one.</p><div class="keys"><span><kbd>C</kbd> compose</span><span><kbd>/</kbd> search</span><span><kbd>J</kbd><kbd>K</kbd> move</span><span><kbd>?</kbd> all shortcuts</span></div><button class="btn primary" data-act="compose" style="margin-top:14px">${ic("square-pen",17)}New message</button></div>`;return}
+  if(!m||m.folder==="drafts"){reader.innerHTML=`<div class="r-empty"><div class="envelope"><div class="b"></div><div class="f"></div><div class="s">${ic("star",16,2.4)}</div></div><h2>Pick a message</h2><p>Choose something from the list to read it here, or start a fresh one.</p><div class="keys"><span><kbd>C</kbd> compose</span><span><kbd>/</kbd> search</span><span><kbd>J</kbd><kbd>K</kbd> move</span><span><kbd>?</kbd> all shortcuts</span></div><button class="btn primary" data-act="compose" style="margin-top:14px">${ic("square-pen",17)}New message</button>${LAY.mode==="list-hidden"&&innerWidth>1180?`<button class="btn ghost" data-act="toggle-list">${ic("panel-left-open",17)}Show message list</button>`:""}</div>`;return}
   const arr=viewMails();const idx=arr.findIndex(x=>x.id===m.id);
   const f=m.folder;const out=f==="sent";
   const tb=[];
+  const lh=LAY.mode==="list-hidden";
+  tb.push(`<button class="icon-btn hide-t" data-act="toggle-list" aria-pressed="${lh}" aria-label="${lh?"Show message list":"Hide message list"}" title="${lh?"Show message list":"Focus view: hide message list"}">${ic(lh?"panel-left-open":"panel-left-close")}</button><span class="sep hide-t"></span>`);
   tb.push(`<button class="icon-btn only-t" data-act="back" aria-label="Back to list">${ic("arrow-left")}</button>`);
   if(f==="trash")tb.push(`<button class="icon-btn" data-act="restore" data-id="${m.id}" title="Restore" aria-label="Restore">${ic("rotate-ccw")}</button><button class="icon-btn danger" data-act="forever" data-id="${m.id}" title="Delete forever" aria-label="Delete forever">${ic("trash-2")}</button>`);
   else{tb.push(f==="archive"?`<button class="icon-btn" data-act="move-inbox" data-id="${m.id}" title="Move to Inbox" aria-label="Move to Inbox">${ic("inbox")}</button>`:`<button class="icon-btn" data-act="archive" data-id="${m.id}" title="Archive (E)" aria-label="Archive">${ic("archive")}</button>`);
@@ -801,6 +840,7 @@ function renderReader(){
   tb.push(`<span class="sep hide-s"></span><button class="icon-btn" data-act="toggle-read" data-id="${m.id}" title="Mark as unread" aria-label="Mark as unread">${ic("mail")}</button><button class="icon-btn" data-act="move" data-id="${m.id}" title="Move to" aria-label="Move to">${ic("folder-input")}</button><button class="icon-btn" data-act="labels" data-id="${m.id}" title="Labels" aria-label="Labels">${ic("tag")}</button><button class="icon-btn" data-act="more" data-id="${m.id}" title="More" aria-label="More">${ic("ellipsis")}</button>`);
   tb.push(`<span class="grow"></span><button class="ai-btn btn" data-act="summarize" data-id="${m.id}">${ic("sparkles",16)}<span class="hide-s">Summarize</span></button>`);
   if(idx>-1)tb.push(`<div class="pager hide-s"><span class="mono">${idx+1} of ${arr.length}</span><button class="icon-btn sm" data-act="prev" aria-label="Newer" ${idx<=0?"disabled":""}>${ic("chevron-left",17)}</button><button class="icon-btn sm" data-act="next" aria-label="Older" ${idx>=arr.length-1?"disabled":""}>${ic("chevron-right",17)}</button></div>`);
+  tb.push(`<button class="icon-btn hide-t" data-act="close-mail" aria-label="Close message" title="Close message (Esc)">${ic("x",19)}</button>`);
   const tags=[...(f==="spam"?[`<span class="tag" style="--c:#D63A46">Spam</span>`]:[]),...(CATS.includes(m.cat)?[`<span class="tag" style="--c:#868E96">${m.cat[0].toUpperCase()+m.cat.slice(1)}</span>`]:[]),...(m.important?[`<span class="tag" style="--c:#B86F06">Important</span>`]:[]),
    ...m.labels.map(l=>{const L=lab(l);return L?`<span class="tag" style="--c:${L.c}">${esc(L.name)}<button data-act="unlabel" data-id="${m.id}" data-l="${l}" aria-label="Remove label">${ic("x",12,2.4)}</button></span>`:""})].join("");
   const toLine=out?"to "+m.to.map(t=>esc(t.name||t.email)).join(", "):"to me"+(m.cc.length?`, ${m.cc.length} more`:"");
@@ -860,7 +900,7 @@ function popover(anchor,html,onClick){closePop();const p=document.createElement(
 function ask({title,text,ok="Confirm",danger}){return new Promise(res=>{const w=document.createElement("div");w.className="modal-wrap";w.innerHTML=`<div class="modal" role="alertdialog" aria-modal="true"><h3>${esc(title)}</h3><p>${esc(text)}</p><div class="acts"><button class="btn ghost" data-r="0">Cancel</button><button class="btn ${danger?"danger":"primary"}" data-r="1">${esc(ok)}</button></div></div>`;
   $("#modal-root").appendChild(w);$("[data-r='1']",w).focus();const done=v=>{w.remove();document.removeEventListener("keydown",kd,true);res(v)};const kd=e=>{if(e.key==="Escape"){e.stopPropagation();done(false)}};document.addEventListener("keydown",kd,true);
   w.addEventListener("click",e=>{if(e.target===w)return done(false);const b=e.target.closest("[data-r]");if(b)done(b.dataset.r==="1")})})}
-function showHelp(){const keys=[["Compose","C"],["Search","/"],["Next / previous message","J / K"],["Open message","Enter"],["Archive","E"],["Delete","#"],["Star","S"],["Mark unread","U"],["Reply / forward","R / F"],["Back to list, close","Esc"],["This help","?"]];
+function showHelp(){const keys=[["Compose","C"],["Search","/"],["Next / previous message","J / K"],["Open message","Enter"],["Archive","E"],["Delete","#"],["Star","S"],["Mark unread","U"],["Reply / forward","R / F"],["Close message","Esc / X"],["Collapse sidebar","["],["This help","?"]];
   const w=document.createElement("div");w.className="modal-wrap";w.innerHTML=`<div class="modal" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts"><h3>Keyboard shortcuts</h3><p>Move through mail without touching the mouse.</p><div class="keys-table">${keys.map(([a,b])=>`<span>${a}</span><kbd>${b}</kbd>`).join("")}</div><div class="acts"><button class="btn primary" data-r="1">Got it</button></div></div>`;
   $("#modal-root").appendChild(w);w.addEventListener("click",e=>{if(e.target===w||e.target.closest("[data-r]"))w.remove()})}
 
@@ -882,8 +922,13 @@ function act_spam(ids){moveMany(ids,"spam",ids.length===1?"Reported as spam":`${
 function act_restore(ids){const snap=ids.map(id=>{const m=byId(id);return [m,m.folder]});animateOut(ids).then(()=>{snap.forEach(([m])=>{m.folder=m.prevFolder||"inbox"});ids.forEach(id=>S.checked.delete(id));if(ids.includes(S.sel)){S.sel=null;app.classList.remove("reading")}renderAll();toast(ids.length===1?"Moved back to "+viewName(snap[0][0].folder):`${ids.length} conversations restored`,{icon:"rotate-ccw",undo:()=>{snap.forEach(([m,f])=>m.folder=f);renderAll()}})})}
 async function act_forever(ids){const ok=await ask({title:ids.length===1?"Delete forever?":`Delete ${ids.length} conversations?`,text:"They'll be removed from this mailbox right away. You can't undo this.",ok:"Delete forever",danger:true});if(!ok)return;
   await animateOut(ids);M=M.filter(m=>!ids.includes(m.id));ids.forEach(id=>S.checked.delete(id));if(ids.includes(S.sel)){S.sel=null;app.classList.remove("reading")}renderAll();toast(ids.length===1?"Conversation deleted forever":`${ids.length} conversations deleted forever`,{icon:"trash-2"})}
-function toggleStar(id,btn){const m=byId(id);m.starred=!m.starred;renderSidebar();renderList();renderReader();if(m.starred&&!reduced){$$(`.star[data-id="${id}"]`).forEach(b=>b.classList.add("pop"))}}
+async function toggleStar(id){const m=byId(id);if(!m)return;const on=!m.starred;
+  if(!on&&(S.view==="starred"||S.view==="important")&&!S.q)await animateOut([id]);
+  m.starred=on;m.important=on;renderAll();
+  if(on&&!reduced)$$(`.star[data-id="${id}"]`).forEach(b=>b.classList.add("pop"));
+  toast(on?"Starred and marked important":"Removed from Starred and Important",{icon:on?"star":"star-off",ms:2800,undo:()=>{m.starred=!on;m.important=!on;renderAll()}})}
 function openMail(id){const m=byId(id);if(!m)return;if(m.folder==="drafts"){openCompose({draft:m});return}
+  if(LAY.mode==="reader-hidden"&&innerWidth>1180){LAY.mode="split";saveLay();applyLayout();setTimeout(reslide,520)}
   m.unread=false;S.sel=id;S.showDetails=false;app.classList.add("reading");renderAll();const r=$(`.row[data-id="${id}"]`,list);if(r)r.scrollIntoView({block:"nearest"})}
 function goView(v){S.view=v;S.q="";S.cat="all";S.filter="all";S.checked.clear();app.classList.remove("drawer");
   if(innerWidth<=1180){S.sel=null;app.classList.remove("reading")}
@@ -904,7 +949,7 @@ function labelPop(btn,ids){const render=()=>`<h4>Label as</h4>${LABELS.map(l=>{c
   function bindNew(){const inp=$("#new-label-in",p);inp.addEventListener("keydown",e=>{if(e.key==="Enter"&&inp.value.trim()){const L=addLabel(inp.value.trim());ids.forEach(id=>byId(id).labels.push(L.id));p.innerHTML=render();bindNew();renderAll();toast(`Label “${L.name}” created`,{icon:"tag"})}})}bindNew()}
 function addLabel(name){const id=name.toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-"+(LABELS.length+1);const L={id,name,c:LCOLORS[LABELS.length%LCOLORS.length]};LABELS.push(L);return L}
 function morePop(btn,id){const m=byId(id);popover(btn,`<button class="mi" data-k="imp">${ic("flag",16)}${m.important?"Mark not important":"Mark as important"}</button><button class="mi" data-k="fwd">${ic("forward",16)}Forward</button><button class="mi" data-k="dl">${ic("download",16)}Download message</button><button class="mi" data-k="orig">${ic("code",16)}Show original</button><hr><button class="mi danger" data-k="block">${ic("ban",16)}Block ${esc(m.from.name)}</button>`,(e)=>{const b=e.target.closest("[data-k]");if(!b)return;closePop();const k=b.dataset.k;
-  if(k==="imp"){m.important=!m.important;renderAll();toast(m.important?"Marked as important":"Marked not important",{icon:"flag"})}
+  if(k==="imp"){m.important=!m.important;m.starred=m.important;renderAll();toast(m.important?"Starred and marked important":"Removed from Starred and Important",{icon:m.important?"star":"star-off"})}
   else if(k==="fwd")forward(m);
   else if(k==="block"){toast(`${m.from.name} blocked. Future mail goes to Spam.`,{icon:"ban",undo:()=>toast("Unblocked",{icon:"check-circle-2",ms:2000})})}
   else toast("That's not part of this demo",{icon:"info",ms:2500})})}
@@ -1120,6 +1165,9 @@ document.addEventListener("click",async e=>{
     case "more":morePop(t,id);break;
     case "details":S.showDetails=!S.showDetails;renderReader();break;
     case "back":S.sel=null;app.classList.remove("reading");renderList();renderReader();break;
+    case "close-mail":closeMail();break;
+    case "toggle-list":LAY.mode=LAY.mode==="list-hidden"?"split":"list-hidden";saveLay();applyLayout();renderReader();setTimeout(reslide,520);break;
+    case "toggle-side":toggleSide();break;
     case "prev":case "next":{const arr=viewMails();const i=arr.findIndex(m=>m.id===S.sel);const n=arr[i+(a==="next"?1:-1)];if(n)openMail(n.id);break}
     case "summarize":{if(S.summary[id]){delete S.summary[id];renderReader();break}S.summary[id]="loading";renderReader();await wait(reduced?0:1100);if(S.summary[id]!=="loading")break;S.summary[id]="done";if(S.sel===id){renderReader();typeSummary()}break}
     case "reply":reply(byId(id),false);break;
@@ -1134,7 +1182,7 @@ document.addEventListener("click",async e=>{
     case "bulk-delete":S.view==="trash"?act_forever([...S.checked]):act_delete([...S.checked]);break;
     case "bulk-restore":act_restore([...S.checked]);break;
     case "bulk-read":{const ids=[...S.checked];const anyUnread=ids.some(i=>byId(i).unread);ids.forEach(i=>byId(i).unread=!anyUnread);S.checked.clear();renderAll();toast(anyUnread?`${ids.length} marked as read`:`${ids.length} marked as unread`,{icon:"mail-open",ms:2200});break}
-    case "bulk-star":{const ids=[...S.checked];const all=ids.every(i=>byId(i).starred);ids.forEach(i=>byId(i).starred=!all);S.checked.clear();renderAll();toast(all?"Stars removed":`${ids.length} starred`,{icon:"star",ms:2200});break}
+    case "bulk-star":{const ids=[...S.checked];const all=ids.every(i=>byId(i).starred);ids.forEach(i=>{const x=byId(i);x.starred=!all;x.important=!all});S.checked.clear();renderAll();toast(all?"Removed from Starred and Important":`${ids.length} starred and marked important`,{icon:"star",ms:2400});break}
     case "empty-folder":{const f=S.view;const ids=M.filter(m=>m.folder===f).map(m=>m.id);const ok=await ask({title:f==="trash"?"Empty Trash?":"Empty Spam?",text:`All ${ids.length} conversation${ids.length===1?"":"s"} here will be deleted forever. You can't undo this.`,ok:"Empty now",danger:true});if(!ok)break;await animateOut(ids);M=M.filter(m=>m.folder!==f);S.sel=null;app.classList.remove("reading");renderAll();toast(f==="trash"?"Trash emptied":"Spam emptied",{icon:"trash-2"});break}
     case "new-label":{const slot=$("#label-new-slot");if(!slot)break;slot.innerHTML=`<div class="label-new"><input id="ln-in" placeholder="Label name" aria-label="New label name" maxlength="24"><button class="icon-btn sm" data-act="ln-ok" aria-label="Create label">${ic("check",16,2.4)}</button></div>`;const inp=$("#ln-in");inp.focus();inp.addEventListener("keydown",ev=>{if(ev.key==="Enter")createLabelFromInput();if(ev.key==="Escape")slot.innerHTML=""});break}
     case "ln-ok":createLabelFromInput();break;
@@ -1176,7 +1224,7 @@ async function typeSummary(){const items=$$("#ai-card li");if(reduced)return;con
 document.addEventListener("keydown",e=>{
   if(V){if(e.key==="Escape")closeViewer();if(e.key==="ArrowRight"&&V.list.length>1)vGo(V.i+1);if(e.key==="ArrowLeft"&&V.list.length>1)vGo(V.i-1);if(e.key==="+"||e.key==="=")zoom(1);if(e.key==="-")zoom(-1);return}
   if($(".modal-wrap"))return;
-  if(e.key==="Escape"){if(popEl)return closePop();if(C&&$("#compose").dataset.state==="max"){$("#compose").dataset.state="normal";$(".c-scrim")&&$(".c-scrim").remove();return}if(app.classList.contains("drawer"))return app.classList.remove("drawer");if(S.checked.size){S.checked.clear();renderList();return}if(S.q&&document.activeElement.id==="q"){S.q="";renderAll();return}if(S.sel&&innerWidth<=1180){S.sel=null;app.classList.remove("reading");renderList();renderReader()}return}
+  if(e.key==="Escape"){if(popEl)return closePop();if(C&&$("#compose").dataset.state==="max"){$("#compose").dataset.state="normal";$(".c-scrim")&&$(".c-scrim").remove();return}if(app.classList.contains("drawer"))return app.classList.remove("drawer");if(S.checked.size){S.checked.clear();renderList();return}if(S.q&&document.activeElement.id==="q"){S.q="";renderAll();return}if(S.sel)closeMail();return}
   if((e.metaKey||e.ctrlKey)&&e.key==="Enter"&&C){e.preventDefault();sendCompose();return}
   const tg=e.target;if(tg.closest&&tg.closest("input,textarea,[contenteditable='true']"))return;if(e.metaKey||e.ctrlKey||e.altKey)return;
   const arr=viewMails();const i=arr.findIndex(m=>m.id===S.sel);
@@ -1184,6 +1232,8 @@ document.addEventListener("keydown",e=>{
     case "c":e.preventDefault();openCompose();break;
     case "/":e.preventDefault();const q=$("#q");if(q){q.focus();q.select()}break;
     case "?":showHelp();break;
+    case "[":toggleSide();break;
+    case "x":if(S.sel)closeMail();break;
     case "j":case "ArrowDown":{e.preventDefault();const n=arr[Math.min(arr.length-1,i+1)];if(n&&n.folder!=="drafts")openMail(n.id);break}
     case "k":case "ArrowUp":{e.preventDefault();const n=arr[Math.max(0,i-1)];if(n&&n.folder!=="drafts")openMail(n.id);break}
     case "e":if(S.sel){const m=byId(S.sel);m.folder==="trash"?act_restore([S.sel]):act_archive([S.sel])}break;
@@ -1222,15 +1272,47 @@ function applyTheme(t){document.documentElement.dataset.theme=t;store.set("halo-
 function toggleTheme(e){const next=isDark()?"light":"dark";document.documentElement.style.setProperty("--vx",e.clientX+"px");document.documentElement.style.setProperty("--vy",e.clientY+"px");
   if(document.startViewTransition&&!reduced)document.startViewTransition(()=>applyTheme(next));else applyTheme(next)}
 
-addEventListener("resize",()=>{clearTimeout(window._rz);window._rz=setTimeout(()=>{slide($("#nav"),$("#nav-pill"),$(".nav-item.on",side),"nav",true);slide($("#seg"),$("#seg-pill"),$("#seg button.on"),"seg-x",false)},120)});
+/* ---------- layout: resizable panes, focus modes, collapsible sidebar ---------- */
+function reslide(){slide($("#nav"),$("#nav-pill"),$(".nav-item.on",side),"nav",true);slide($("#seg"),$("#seg-pill"),$("#seg button.on"),"seg-"+(S.view==="inbox"&&!S.q?"cat":"f"),false)}
+function availW(){const cs=getComputedStyle(app);const inner=app.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);return inner-(app.classList.contains("side-collapsed")?76:248)-28}
+function applyLayout(){const desk=innerWidth>1180;
+  app.classList.toggle("list-hidden",desk&&LAY.mode==="list-hidden");app.classList.toggle("reader-hidden",desk&&LAY.mode==="reader-hidden");
+  if(!desk){app.style.removeProperty("--list-w");return}
+  const av=availW();const w=LAY.mode==="list-hidden"?0:LAY.mode==="reader-hidden"?av:Math.max(300,Math.min(LAY.listW,av-380));
+  app.style.setProperty("--list-w",Math.round(w)+"px")}
+function closeMail(){S.sel=null;app.classList.remove("reading");if(LAY.mode==="list-hidden"){LAY.mode="split";saveLay();applyLayout();setTimeout(reslide,520)}renderList();renderReader()}
+function toggleSide(){if(innerWidth<=780)return;const c=app.classList.toggle("side-collapsed");store.set("halo-side",c?"1":"0");applyLayout();
+  const tg=$(".side-tg",side);if(tg){tg.title=(c?"Expand":"Collapse")+" sidebar ( [ )";$("span",tg).textContent=(c?"Expand":"Collapse")+" sidebar"}
+  requestAnimationFrame(()=>slide($("#nav"),$("#nav-pill"),$(".nav-item.on",side),"nav",true));setTimeout(reslide,520)}
+const rz=$("#resizer");
+rz.addEventListener("pointerdown",e=>{if(innerWidth<=1180||e.button!==0)return;e.preventDefault();try{rz.setPointerCapture(e.pointerId)}catch(_){}
+  const startX=e.clientX;const listLeft=side.getBoundingClientRect().right+14;const av=availW();let w=null,raf=0;
+  const mv=ev=>{if(w===null&&Math.abs(ev.clientX-startX)<3)return;if(w===null){app.classList.add("resizing");app.classList.remove("list-hidden","reader-hidden")}
+    w=Math.max(120,Math.min(av-160,ev.clientX-listLeft-7));app.style.setProperty("--list-w",w+"px");
+    app.classList.toggle("will-hide-list",w<220);app.classList.toggle("will-hide-reader",w>av-320);
+    if(!raf)raf=requestAnimationFrame(()=>{raf=0;reslide()})};
+  const up=()=>{rz.removeEventListener("pointermove",mv);rz.removeEventListener("pointerup",up);rz.removeEventListener("pointercancel",up);
+    app.classList.remove("resizing","will-hide-list","will-hide-reader");if(w===null)return;
+    if(w<220){LAY.mode="list-hidden";toast("Message list hidden. Use the list button or drag the edge to bring it back.",{icon:"panel-left-close",ms:3400})}
+    else if(w>av-320){LAY.mode="reader-hidden";toast("Reading pane hidden. Open any message to bring it back.",{icon:"panel-right-close",ms:3400})}
+    else{LAY.mode="split";LAY.listW=w}
+    saveLay();applyLayout();renderReader();setTimeout(reslide,520)};
+  rz.addEventListener("pointermove",mv);rz.addEventListener("pointerup",up);rz.addEventListener("pointercancel",up)});
+rz.addEventListener("dblclick",()=>{LAY.mode="split";LAY.listW=380;saveLay();applyLayout();renderReader();setTimeout(reslide,520)});
+rz.addEventListener("keydown",e=>{if(e.key!=="ArrowLeft"&&e.key!=="ArrowRight")return;e.preventDefault();LAY.mode="split";LAY.listW=Math.max(300,Math.min(availW()-380,LAY.listW+(e.key==="ArrowRight"?32:-32)));saveLay();applyLayout();setTimeout(reslide,520)});
+addEventListener("resize",()=>{clearTimeout(window._rz);window._rz=setTimeout(()=>{app.classList.add("resizing");applyLayout();renderReader();reslide();requestAnimationFrame(()=>app.classList.remove("resizing"))},120)});
 
 /* ---------- boot ---------- */
 (async()=>{
   const saved=store.get("halo-theme");if(saved==="dark"||saved==="light")document.documentElement.dataset.theme=saved;
   try{await Promise.race([document.fonts.ready,wait(1200)])}catch(_){}
   seed();
-  if(innerWidth>1180)S.sel=M[0].id,M[0].unread=false;
+  M.forEach(m=>{const v=m.starred||m.important;m.starred=v;m.important=v});
+  if(store.get("halo-side")==="1"&&innerWidth>780)app.classList.add("side-collapsed");
+  app.classList.add("resizing");applyLayout();
+  if(innerWidth>1180&&LAY.mode!=="reader-hidden")S.sel=M[0].id,M[0].unread=false;
   renderSidebar();renderList(true);renderReader();
+  requestAnimationFrame(()=>requestAnimationFrame(()=>app.classList.remove("resizing")));
   setTimeout(()=>loadPdf().then(()=>{const m=S.sel&&byId(S.sel);if(m)renderReader()}).catch(()=>{}),400);
 })();
 })();
