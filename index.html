@@ -27,6 +27,7 @@
   --shadow:0 1px 2px rgba(20,24,60,.05),0 22px 50px -24px rgba(20,24,60,.28);
   --shadow-pop:0 18px 50px -12px rgba(20,24,60,.30),0 2px 8px rgba(20,24,60,.08);
   --scrim:rgba(14,16,34,.34); --viewer:rgba(9,10,22,.88); --viewer-ink:#F1F2FA;
+  --paper:#FFFFFF; --env-1:#FFFFFF; --env-2:#ECEFFB; --env-shadow:rgba(20,24,60,.30);
   --f-display:"Instrument Serif",Georgia,"Times New Roman",serif;
   --f-body:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
@@ -47,6 +48,7 @@
   --shadow:0 1px 2px rgba(0,0,0,.3),0 22px 50px -24px rgba(0,0,0,.7);
   --shadow-pop:0 18px 50px -12px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.4);
   --scrim:rgba(0,0,0,.5); --viewer:rgba(4,5,12,.92);
+  --paper:#F1F2FB; --env-1:#2C3058; --env-2:#1D2042; --env-shadow:rgba(0,0,0,.65);
   color-scheme:dark;
 }}
 :root[data-theme="dark"]{
@@ -64,6 +66,7 @@
   --shadow:0 1px 2px rgba(0,0,0,.3),0 22px 50px -24px rgba(0,0,0,.7);
   --shadow-pop:0 18px 50px -12px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.4);
   --scrim:rgba(0,0,0,.5); --viewer:rgba(4,5,12,.92);
+  --paper:#F1F2FB; --env-1:#2C3058; --env-2:#1D2042; --env-shadow:rgba(0,0,0,.65);
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -430,10 +433,42 @@ mark{background:var(--mark);color:inherit;border-radius:4px;padding:0 2px}
 .chip.smart{border-style:dashed}
 .reply-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .r-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;padding:30px;color:var(--ink-3)}
-.envelope{width:150px;height:110px;position:relative;margin-bottom:12px;animation:float 5s ease-in-out infinite}
-.envelope .b{position:absolute;inset:0;border-radius:18px;background:var(--glass-2);box-shadow:var(--shadow);border:1px solid var(--glass-line)}
-.envelope .f{position:absolute;left:0;right:0;top:0;height:64px;background:linear-gradient(160deg,var(--accent),#E46A8A);clip-path:polygon(0 0,100% 0,50% 100%);border-radius:18px 18px 0 0;opacity:.9}
-.envelope .s{position:absolute;right:-10px;top:-10px;width:30px;height:30px;border-radius:50%;background:var(--star);display:grid;place-items:center;color:#fff;box-shadow:0 6px 16px -4px var(--star)}
+/* 3D envelope illustration */
+.env-scene{--rx:0deg;--ry:0deg;position:relative;width:240px;height:210px;margin:0 auto 4px;perspective:900px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.env-stage{position:absolute;inset:0;transform:rotateX(var(--rx)) rotateY(var(--ry));transition:transform .3s var(--ease)}
+.orbit{position:absolute;left:50%;top:60%;width:236px;height:236px;margin:-118px 0 0 -118px;perspective:700px;pointer-events:none}
+.orbit.back{z-index:0}
+.orbit.front{z-index:6;clip-path:inset(50% -30px -30px -30px)}
+.orbit .ring{position:absolute;inset:0;border-radius:50%;border:1.5px dashed color-mix(in srgb,var(--accent) 55%,transparent);transform:rotateX(76deg);animation:ringSpin 16s linear infinite}
+.orbit .ring i{position:absolute;width:11px;height:11px;border-radius:50%;left:50%;top:-6px;margin-left:-5.5px;background:var(--accent);box-shadow:0 0 14px 2px var(--accent)}
+.orbit .ring i:nth-child(2){top:auto;bottom:-6px;background:#E46A8A;box-shadow:0 0 14px 2px #E46A8A}
+.orbit .ring i:nth-child(3){top:50%;left:-6px;margin:-5.5px 0 0;background:var(--star);box-shadow:0 0 14px 2px var(--star)}
+@keyframes ringSpin{to{transform:rotateX(76deg) rotate(360deg)}}
+.env{position:absolute;left:50%;top:50%;width:164px;height:112px;margin:-62px 0 0 -82px;z-index:2;animation:envFloat 4.6s ease-in-out infinite}
+@keyframes envFloat{0%,100%{transform:translateY(0) rotate(-2.5deg)}50%{transform:translateY(-10px) rotate(2.5deg)}}
+.env-back{position:absolute;inset:0;border-radius:18px;background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 80%,#000),color-mix(in srgb,#E46A8A 65%,#000));box-shadow:0 26px 40px -18px color-mix(in srgb,var(--accent) 75%,transparent)}
+.letter{position:absolute;left:13px;right:13px;top:9px;height:94px;z-index:2;border-radius:11px;background:var(--paper);box-shadow:0 6px 16px rgba(0,0,0,.18);padding:12px;display:flex;flex-direction:column;gap:7px;transition:transform .45s var(--ease)}
+.letter .lh{display:flex;align-items:center;gap:7px}
+.letter .dotav{width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#E46A8A)}
+.letter i{display:block;height:6px;border-radius:4px;background:color-mix(in srgb,var(--accent) 24%,#fff)}
+.letter .lh i{flex:1;height:7px;background:color-mix(in srgb,var(--accent) 45%,#fff)}
+.letter i.w8{width:86%}.letter i.w6{width:62%}.letter i.w4{width:40%;background:color-mix(in srgb,#E46A8A 40%,#fff)}
+.env-front{position:absolute;inset:0;z-index:3;border-radius:18px;background:linear-gradient(180deg,var(--env-1),var(--env-2));clip-path:polygon(0 36%,50% 74%,100% 36%,100% 100%,0 100%);box-shadow:inset 0 -2px 0 rgba(0,0,0,.05)}
+.env-flap{position:absolute;left:0;right:0;top:0;height:80px;z-index:4;transform-origin:50% 0;border-radius:18px 18px 0 0;background:linear-gradient(165deg,var(--accent),#E46A8A 85%);clip-path:polygon(0 0,100% 0,50% 100%);transform:perspective(420px) rotateX(0deg);transition:transform .5s var(--ease) .22s,z-index 0s .22s,filter .5s}
+.env-seal{position:absolute;left:50%;top:62px;width:32px;height:32px;margin-left:-16px;z-index:5;border-radius:50%;display:grid;place-items:center;color:#fff;background:radial-gradient(circle at 35% 30%,#FFD45E,var(--star) 60%,#D98E00);box-shadow:0 6px 14px -4px var(--star),inset 0 -2px 0 rgba(0,0,0,.15);transition:transform .5s var(--spring) .2s,opacity .3s .2s}
+.env-badge{position:absolute;right:-12px;top:-12px;z-index:7;min-width:28px;height:28px;padding:0 8px;border-radius:999px;display:grid;place-items:center;background:var(--danger);color:#fff;font:700 12px/1 var(--f-mono);box-shadow:0 0 0 3px var(--bg-2),0 8px 16px -6px var(--danger);animation:badgeBob 2.8s var(--spring) infinite}
+@keyframes badgeBob{0%,70%,100%{transform:none}78%{transform:translateY(-6px) scale(1.08)}86%{transform:translateY(0) scale(.96)}}
+.env-shadow{position:absolute;left:50%;bottom:8px;width:130px;height:16px;margin-left:-65px;border-radius:50%;background:radial-gradient(closest-side,var(--env-shadow),transparent);animation:shadowPulse 4.6s ease-in-out infinite}
+@keyframes shadowPulse{50%{transform:scaleX(.82);opacity:.6}}
+.spark{position:absolute;left:var(--x);top:var(--y);width:var(--s,12px);height:var(--s,12px);z-index:8;background:var(--c);clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);animation:twinkle2 2.6s ease-in-out infinite;animation-delay:var(--d);translate:0 0;transition:translate .6s var(--spring)}
+@keyframes twinkle2{0%,100%{transform:scale(.35) rotate(0deg);opacity:.35}50%{transform:scale(1) rotate(90deg);opacity:1}}
+/* open on hover / focus */
+.env-scene:hover .env-flap,.env-scene.open .env-flap{transform:perspective(420px) rotateX(180deg);z-index:1;filter:brightness(.85);transition:transform .5s var(--ease),z-index 0s .2s,filter .5s}
+.env-scene:hover .letter,.env-scene.open .letter{transform:translateY(-60px) rotate(-3deg);transition:transform .7s var(--spring) .2s}
+.env-scene:hover .env-seal,.env-scene.open .env-seal{transform:translateY(-84px) scale(.5) rotate(220deg);opacity:0;transition:transform .5s var(--ease),opacity .3s .15s}
+.env-scene:hover .spark,.env-scene.open .spark{translate:var(--dx) var(--dy)}
+.env-scene:hover .orbit .ring{animation-duration:5s}
+.env-scene:hover .env{animation-play-state:paused}
 .r-empty h2{margin:0;font-family:var(--f-display);font-weight:400;font-size:34px;color:var(--ink)}
 .r-empty p{margin:0;max-width:40ch}
 .r-empty .keys{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:10px;font-size:12px}
@@ -921,7 +956,20 @@ function skeleton(){const r=$("#rows");if(!r)return;r.innerHTML=Array.from({leng
 /* ---------- render: reader ---------- */
 function renderReader(){
   const m=S.sel&&byId(S.sel);
-  if(!m||m.folder==="drafts"){reader.innerHTML=`<div class="r-empty"><div class="envelope"><div class="b"></div><div class="f"></div><div class="s">${ic("star",16,2.4)}</div></div><h2>Pick a message</h2><p>Choose something from the list to read it here, or start a fresh one.</p><div class="keys"><span><kbd>C</kbd> compose</span><span><kbd>/</kbd> search</span><span><kbd>J</kbd><kbd>K</kbd> move</span><span><kbd>?</kbd> all shortcuts</span></div><button class="btn primary" data-act="compose" style="margin-top:14px">${ic("square-pen",17)}New message</button>${LAY.mode==="list-hidden"&&innerWidth>1180?`<button class="btn ghost" data-act="toggle-list">${ic("panel-left-open",17)}Show message list</button>`:""}</div>`;return}
+  if(!m||m.folder==="drafts"){const unread=counts().inbox||0;
+    const sp=(x,y,dx,dy,c,s,d)=>`<span class="spark" style="--x:${x};--y:${y};--dx:${dx};--dy:${dy};--c:${c};--s:${s}px;--d:${d}s"></span>`;
+    reader.innerHTML=`<div class="r-empty"><div class="env-scene" data-act="compose" title="Start a new message" aria-hidden="true"><div class="env-stage">
+      <div class="orbit back"><div class="ring"><i></i><i></i><i></i></div></div>
+      <div class="env"><div class="env-back"></div><div class="letter"><div class="lh"><span class="dotav"></span><i></i></div><i class="w8"></i><i class="w6"></i><i class="w4"></i></div><div class="env-front"></div><div class="env-flap"></div><div class="env-seal">${ic("star",15,2.6)}</div>${unread?`<span class="env-badge">${unread}</span>`:""}</div>
+      <div class="orbit front"><div class="ring"><i></i><i></i><i></i></div></div>
+      ${sp("18%","22%","-26px","-22px","var(--accent)",13,0)}${sp("80%","16%","24px","-26px","#E46A8A",11,.7)}${sp("88%","62%","30px","10px","var(--star)",9,1.3)}${sp("10%","66%","-30px","12px","var(--star)",10,1.9)}${sp("50%","4%","0px","-30px","#9AA8FF",8,1)}
+      <span class="env-shadow"></span></div></div>
+      <h2>Pick a message</h2><p>${unread?`You have ${unread} unread message${unread>1?"s":""}. `:""}Choose one from the list to read it here, or start a fresh one.</p><div class="keys"><span><kbd>C</kbd> compose</span><span><kbd>/</kbd> search</span><span><kbd>J</kbd><kbd>K</kbd> move</span><span><kbd>?</kbd> all shortcuts</span></div><button class="btn primary" data-act="compose" style="margin-top:14px">${ic("square-pen",17)}New message</button>${LAY.mode==="list-hidden"&&innerWidth>1180?`<button class="btn ghost" data-act="toggle-list">${ic("panel-left-open",17)}Show message list</button>`:""}</div>`;
+    const sc=$(".env-scene",reader),box=$(".r-empty",reader);
+    if(sc&&!reduced&&matchMedia("(hover:hover)").matches){const cl=v=>Math.max(-1,Math.min(1,v));
+      box.addEventListener("mousemove",e=>{const r=sc.getBoundingClientRect();const x=cl((e.clientX-(r.left+r.width/2))/(r.width*1.2)),y=cl((e.clientY-(r.top+r.height/2))/(r.height*1.2));sc.style.setProperty("--ry",(x*20).toFixed(1)+"deg");sc.style.setProperty("--rx",(-y*16).toFixed(1)+"deg")});
+      box.addEventListener("mouseleave",()=>{sc.style.setProperty("--ry","0deg");sc.style.setProperty("--rx","0deg")})}
+    return}
   const arr=viewMails();const idx=arr.findIndex(x=>x.id===m.id);
   const f=m.folder;const out=f==="sent";
   const tb=[];
