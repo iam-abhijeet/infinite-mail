@@ -1,4 +1,4 @@
-# Halo Mail
+# Infinite Mail
 
 A clickable mailbox UI/UX concept. It's a static demo built to pitch the design: there's no backend, and nothing is really sent.
 
@@ -25,6 +25,7 @@ A clickable mailbox UI/UX concept. It's a static demo built to pitch the design:
 - **Refresh:** delivers a new message the first time
 - **Motion and UI:** frosted-glass panels, drifting background, ripple buttons, staggered list animations, swipe actions on touch, toasts with Undo
 - **Themes:** light and dark mode with a circular reveal
+- **Brand:** animated infinity-loop logo, with a gold dot and light trail circling the loop
 - **Layout:** works on desktop, tablet and phone
 - **Keyboard shortcuts:** `C` compose, `/` search, `J`/`K` move, `E` archive, `#` delete, `S` star, `R` reply, `F` forward, `?` help
 

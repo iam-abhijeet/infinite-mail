@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Halo Mail: a clickable mailbox UI/UX concept with folders, labels, compose, attachment previews and motion.">
-<title>Halo Mail</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 34 34%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%233550F2%27/%3E%3Cstop offset=%271%27 stop-color=%27%23E46A8A%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2734%27 height=%2734%27 rx=%2711%27 fill=%27url(%23g)%27/%3E%3Cpath d=%27M17 17c-2.3-3.1-4.5-4.7-6.8-4.7a4.7 4.7 0 0 0 0 9.4c2.3 0 4.5-1.6 6.8-4.7s4.5-4.7 6.8-4.7a4.7 4.7 0 0 1 0 9.4c-2.3 0-4.5-1.6-6.8-4.7z%27 fill=%27none%27 stroke=%27white%27 stroke-width=%272.6%27/%3E%3Ccircle cx=%2724%27 cy=%2712.4%27 r=%272.4%27 fill=%27%23FFC233%27/%3E%3C/svg%3E">
+<meta name="description" content="Infinite Mail: a clickable mailbox UI/UX concept with folders, labels, compose, attachment previews and motion.">
+<title>Infinite Mail</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -132,7 +133,11 @@ kbd{font-family:var(--f-mono);font-size:10.5px;padding:1px 6px;border-radius:6px
 /* sidebar */
 .side{display:flex;flex-direction:column;min-height:0;min-width:0;padding:6px 4px 0;overflow:hidden}
 .brand{display:flex;align-items:center;gap:10px;padding:6px 10px 18px}
-.brand .logo{width:34px;height:34px;flex:none}
+.brand .logo{width:34px;height:34px;flex:none;border-radius:11px;transition:transform .6s var(--spring),box-shadow .4s}
+.brand:hover .logo{transform:rotate(-8deg) scale(1.08);box-shadow:0 10px 22px -8px var(--accent)}
+.inf-trace{stroke-dasharray:38 62;stroke-dashoffset:38;animation:infTrace 3.6s linear infinite}
+@keyframes infTrace{to{stroke-dashoffset:-62}}
+.so-card .logo{border-radius:16px}
 .brand-name{font-family:var(--f-display);font-size:28px;line-height:1;letter-spacing:-.01em}
 .brand-name em{font-style:italic;color:var(--accent-ink)}
 .compose-btn{width:100%;height:50px;justify-content:flex-start;padding:0 16px;border-radius:16px;font-size:14.5px;background:var(--accent);color:var(--on-accent);box-shadow:0 14px 30px -12px var(--accent)}
@@ -692,7 +697,8 @@ function sanitize(html){const doc=new DOMParser().parseFromString("<div>"+html+"
 /* icons from lucide data */
 const iconCache={};
 function ic(n,sz=18,sw=1.85){const k=n+sz+sw;if(iconCache[k])return iconCache[k];const L=window.lucide;const key=n.split("-").map(p=>p[0].toUpperCase()+p.slice(1)).join("");let node=L&&L.icons&&L.icons[key];let kids=[];if(node){kids=node[0]==="svg"?(node[2]||[]):node}const inner=kids.map(([t,a])=>"<"+t+" "+Object.entries(a||{}).filter(([x])=>x!=="key").map(([x,v])=>x+'="'+v+'"').join(" ")+"/>").join("");return iconCache[k]=`<svg class="ic" width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner||'<circle cx="12" cy="12" r="4"/>'}</svg>`}
-const LOGO=`<svg class="logo" viewBox="0 0 34 34" aria-hidden="true"><defs><linearGradient id="hl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3550F2"/><stop offset="1" stop-color="#E46A8A"/></linearGradient></defs><rect width="34" height="34" rx="11" fill="url(#hl)"/><path d="M9 13.5 17 19l8-5.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><rect x="8" y="10.5" width="18" height="13" rx="3.5" fill="none" stroke="#fff" stroke-width="2.2"/><circle cx="26" cy="9" r="4.2" fill="#fff"/><circle cx="26" cy="9" r="2" fill="#F2A900"/></svg>`;
+const INF_PATH="M17 17c-2.3-3.1-4.5-4.7-6.8-4.7a4.7 4.7 0 0 0 0 9.4c2.3 0 4.5-1.6 6.8-4.7s4.5-4.7 6.8-4.7a4.7 4.7 0 0 1 0 9.4c-2.3 0-4.5-1.6-6.8-4.7z";
+const LOGO=`<svg class="logo" viewBox="0 0 34 34" aria-hidden="true"><defs><linearGradient id="hl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3550F2"/><stop offset="1" stop-color="#E46A8A"/></linearGradient></defs><rect width="34" height="34" rx="11" fill="url(#hl)"/><path d="${INF_PATH}" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2.4" stroke-linejoin="round"/><path class="inf-trace" d="${INF_PATH}" pathLength="100" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>${reduced?`<circle cx="24" cy="12.4" r="2.3" fill="#FFC233"/>`:`<circle r="2.3" fill="#FFC233"><animateMotion dur="3.6s" repeatCount="indefinite" path="${INF_PATH}"/></circle>`}</svg>`;
 
 /* ---------- file kinds ---------- */
 const KIND={image:{icon:"image",c:"#1C7ED6",label:"Image"},pdf:{icon:"file-text",c:"#E03131",label:"PDF"},doc:{icon:"file-text",c:"#2B6CDF",label:"Document"},sheet:{icon:"file-spreadsheet",c:"#2F9E44",label:"Spreadsheet"},slide:{icon:"presentation",c:"#E8590C",label:"Slides"},zip:{icon:"file-archive",c:"#7950F2",label:"Archive"},video:{icon:"film",c:"#D6336C",label:"Video"},audio:{icon:"music",c:"#0CA678",label:"Audio"},text:{icon:"file-code",c:"#5C7CFA",label:"Text"},file:{icon:"file",c:"#868E96",label:"File"}};
@@ -728,7 +734,7 @@ function makePdf(pages){
   pages.forEach((p,i)=>{const po=5+i*2,co=6+i*2;kids.push(po+" 0 R");
     let s="0.208 0.314 0.949 rg 0 712 612 80 re f\n0.894 0.416 0.541 rg 0 712 612 5 re f\n";
     s+=`BT /F2 22 Tf 1 1 1 rg 48 750 Td (${enc(p.title)}) Tj ET\n`;
-    s+=`BT /F1 9 Tf 0.85 0.88 1 rg 48 732 Td (${enc(p.sub||"Prepared with Halo Mail demo data")}) Tj ET\n`;
+    s+=`BT /F1 9 Tf 0.85 0.88 1 rg 48 732 Td (${enc(p.sub||"Prepared with Infinite Mail demo data")}) Tj ET\n`;
     let y=672;
     p.lines.forEach(l=>{
       if(typeof l==="string"){s+=`BT /F1 11 Tf 0.29 0.31 0.42 rg 48 ${y} Td (${enc(l)}) Tj ET\n`;y-=18}
@@ -737,7 +743,7 @@ function makePdf(pages){
       else if(l.row){s+=`BT /F1 11 Tf 0.29 0.31 0.42 rg 48 ${y} Td (${enc(l.row[0])}) Tj ET\nBT /F2 11 Tf 0.08 0.09 0.17 rg 440 ${y} Td (${enc(l.row[1])}) Tj ET\n0.88 0.89 0.94 RG 48 ${y-8} m 564 ${y-8} l S\n`;y-=26}
       else if(l.swatch){l.swatch.forEach((c,j)=>{s+=`${c[0]} ${c[1]} ${c[2]} rg ${48+j*104} ${y-70} 92 84 re f\n`;});y-=96}
     });
-    s+=`0.85 0.87 0.93 RG 48 56 m 564 56 l S\nBT /F1 8 Tf 0.5 0.52 0.62 rg 48 40 Td (Halo Mail - demo document) Tj ET\nBT /F1 8 Tf 0.5 0.52 0.62 rg 520 40 Td (Page ${i+1} of ${n}) Tj ET\n`;
+    s+=`0.85 0.87 0.93 RG 48 56 m 564 56 l S\nBT /F1 8 Tf 0.5 0.52 0.62 rg 48 40 Td (Infinite Mail - demo document) Tj ET\nBT /F1 8 Tf 0.5 0.52 0.62 rg 520 40 Td (Page ${i+1} of ${n}) Tj ET\n`;
     objs[po-1]=`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${co} 0 R >>`;
     objs[co-1]=`<< /Length ${s.length} >>\nstream\n${s}\nendstream`;
   });
@@ -757,20 +763,20 @@ const A={
 };
 
 /* ---------- data ---------- */
-const ME={name:"Aanya Kapoor",email:"aanya@halomail.app",title:"Product Designer",sig:"Aanya Kapoor · Product Designer, Halo"};
+const ME={name:"Aanya Kapoor",email:"aanya@infinitemail.app",title:"Product Designer",sig:"Aanya Kapoor · Product Designer, Infinite"};
 const LABELS=[{id:"work",name:"Work",c:"#6C5CE7"},{id:"clients",name:"Clients",c:"#E8590C"},{id:"personal",name:"Personal",c:"#0CA678"},{id:"travel",name:"Travel",c:"#1C7ED6"},{id:"finance",name:"Finance",c:"#C2255C"}];
 const LCOLORS=["#D6336C","#0B7285","#5F3DC4","#E67700","#2B8A3E","#1971C2"];
 const P={
-  riya:{name:"Riya Mehta",email:"riya@lumenstudio.co"},arjun:{name:"Arjun Rao",email:"arjun.rao@halomail.app"},meera:{name:"Meera Iyer",email:"meera.iyer@halomail.app"},
-  kabir:{name:"Kabir Shah",email:"kabir@shahlegal.in"},dev:{name:"Dev Malhotra",email:"dev.m@halomail.app"},sana:{name:"Sana Qureshi",email:"sana@wanderdesk.travel"},
-  neha:{name:"Neha Gupta",email:"neha.gupta@halomail.app"},team:{name:"Design team",email:"design@halomail.app"},
+  riya:{name:"Riya Mehta",email:"riya@lumenstudio.co"},arjun:{name:"Arjun Rao",email:"arjun.rao@infinitemail.app"},meera:{name:"Meera Iyer",email:"meera.iyer@infinitemail.app"},
+  kabir:{name:"Kabir Shah",email:"kabir@shahlegal.in"},dev:{name:"Dev Malhotra",email:"dev.m@infinitemail.app"},sana:{name:"Sana Qureshi",email:"sana@wanderdesk.travel"},
+  neha:{name:"Neha Gupta",email:"neha.gupta@infinitemail.app"},team:{name:"Design team",email:"design@infinitemail.app"},
   paynest:{name:"PayNest",email:"receipts@paynest.money",brand:1},kite:{name:"Kite Air",email:"deals@kiteair.fly",brand:1},shot:{name:"Shotfolio",email:"hello@shotfolio.art",brand:1},
   cloud:{name:"Cloudbase",email:"billing@cloudbase.dev",brand:1},shop:{name:"ShopKart",email:"orders@shopkart.store",brand:1},page:{name:"Pagecraft",email:"news@pagecraft.io",brand:1},
-  sec:{name:"Halo Security",email:"no-reply@halomail.app",brand:1},bank:{name:"Northstar Bank",email:"statements@northstar.bank",brand:1},stream:{name:"Streamly",email:"offers@streamly.tv",brand:1},
-  link:{name:"Linkup",email:"notify@linkup.social",brand:1},halo:{name:"Halo Team",email:"team@halomail.app",brand:1},
+  sec:{name:"Infinite Security",email:"no-reply@infinitemail.app",brand:1},bank:{name:"Northstar Bank",email:"statements@northstar.bank",brand:1},stream:{name:"Streamly",email:"offers@streamly.tv",brand:1},
+  link:{name:"Linkup",email:"notify@linkup.social",brand:1},halo:{name:"Infinite Team",email:"team@infinitemail.app",brand:1},
   spam1:{name:"Prize Center",email:"winner@free-gifts.biz",brand:1},spam2:{name:"Wallet Support",email:"secure@wallet-verify.co",brand:1}
 };
-const CONTACTS=[P.riya,P.arjun,P.meera,P.kabir,P.dev,P.sana,P.neha,P.team,{name:"Ishaan Verma",email:"ishaan@halomail.app"},{name:"Tara Fernandes",email:"tara.f@lumenstudio.co"}];
+const CONTACTS=[P.riya,P.arjun,P.meera,P.kabir,P.dev,P.sana,P.neha,P.team,{name:"Ishaan Verma",email:"ishaan@infinitemail.app"},{name:"Tara Fernandes",email:"tara.f@lumenstudio.co"}];
 let seq=0;const now=Date.now();const ago=m=>new Date(now-m*60000);
 const mk=o=>Object.assign({id:"m"+(++seq),folder:"inbox",cat:"primary",to:[ME],cc:[],unread:false,starred:false,important:false,labels:[],attachments:[],summary:null,smart:null},o);
 let M=[];
@@ -778,7 +784,7 @@ function seed(){
 M=[
 mk({from:P.riya,subject:"Brand kit for the Q1 launch",time:ago(14),unread:true,starred:true,important:true,labels:["clients"],cc:[{name:"Tara Fernandes",email:"tara.f@lumenstudio.co"}],
  body:`<p>Hi Aanya,</p><p>The final brand kit is ready. I've attached the guidelines PDF, the hero shot for the landing page and the new logo mark.</p><p>A few things to note:</p><ul><li>The primary blue is now <b>#3550F2</b>; please swap it in the app header.</li><li>Use the hero shot at 16:9 only. The crop matters.</li><li>The logo needs 24px of clear space on every side.</li></ul><p>Can you confirm by Thursday so we can send it to print?</p><p>Thanks,<br>Riya</p>`,
- attachments:[A.pdf("brand-guidelines.pdf",[{title:"Lumen x Halo - Brand Guidelines",sub:"Version 3.2 - Q1 launch",lines:[{h:"Colour palette"},{swatch:[[.208,.314,.949],[.894,.416,.541],[.08,.09,.17],[.95,.66,0],[.07,.53,.35]]},{h:"Typography"},"Display: Instrument Serif, 44/48, tracking -1%","Body: Plus Jakarta Sans, 15/26","Data: JetBrains Mono, 12/18",{h:"Logo usage"},"Minimum size 24px. Keep 24px clear space on all sides.","Never stretch, recolour or add effects to the mark."]},{title:"Brand Guidelines - Voice",sub:"Version 3.2 - Q1 launch",lines:[{h:"How we sound"},"Warm, plain and specific. We say what a button does.","We avoid jargon and exclamation marks in product copy.",{h:"Brand health"},{bar:82,label:"Recognition"},{bar:64,label:"Consistency"},{bar:91,label:"Trust"}]}]),A.img("hero-shot.jpg","sky","#FF9A7B","#6A5CFF","Hero - golden hour"),A.img("logo-mark.png","logo","#3550F2","#E46A8A","")],
+ attachments:[A.pdf("brand-guidelines.pdf",[{title:"Lumen x Infinite - Brand Guidelines",sub:"Version 3.2 - Q1 launch",lines:[{h:"Colour palette"},{swatch:[[.208,.314,.949],[.894,.416,.541],[.08,.09,.17],[.95,.66,0],[.07,.53,.35]]},{h:"Typography"},"Display: Instrument Serif, 44/48, tracking -1%","Body: Plus Jakarta Sans, 15/26","Data: JetBrains Mono, 12/18",{h:"Logo usage"},"Minimum size 24px. Keep 24px clear space on all sides.","Never stretch, recolour or add effects to the mark."]},{title:"Brand Guidelines - Voice",sub:"Version 3.2 - Q1 launch",lines:[{h:"How we sound"},"Warm, plain and specific. We say what a button does.","We avoid jargon and exclamation marks in product copy.",{h:"Brand health"},{bar:82,label:"Recognition"},{bar:64,label:"Consistency"},{bar:91,label:"Trust"}]}]),A.img("hero-shot.jpg","sky","#FF9A7B","#6A5CFF","Hero - golden hour"),A.img("logo-mark.png","logo","#3550F2","#E46A8A","")],
  summary:["Riya shared the final Q1 brand kit: guidelines PDF, hero shot and logo mark.","New primary blue #3550F2 must replace the current app header colour.","Hero image is 16:9 only; logo needs 24px clear space.","Action: confirm by Thursday so it can go to print."],smart:["Looks great, approved.","I'll confirm by Thursday.","Can we hop on a quick call?"]}),
 mk({from:P.neha,subject:"Feedback on the mobile flows",time:ago(48),unread:true,labels:["work"],
  body:`<p>Hey!</p><p>Went through the v2 flows on my phone. Onboarding feels much faster now. Two notes:</p><ol><li>The empty inbox illustration is lovely, but the CTA sits below the fold on small phones.</li><li>Swipe to archive needs a haptic tick at the threshold.</li></ol><p>Screenshot attached with my annotations.</p><p>Neha</p>`,
@@ -788,7 +794,7 @@ mk({from:P.arjun,subject:"Design review moved to Thursday, 4 PM",time:ago(95),im
  attachments:[A.pdf("review-agenda.pdf",[{title:"Design Review - Agenda",sub:"Thursday 4:00 PM - Aurora room",lines:[{row:["Mailbox walkthrough","20 min"]},{row:["Compose and attachments","15 min"]},{row:["Accessibility pass","10 min"]},{row:["Open questions","15 min"]},{h:"Before the meeting"},"Share your prototype link in the channel by noon.","Note any blockers in the tracker."]}])]}),
 mk({from:P.paynest,cat:"transactions",subject:"Payment received: ₹48,500 from Orbit Labs",time:ago(160),labels:["finance"],
  body:`<p>You've received a payment.</p><table><tr><th>From</th><td>Orbit Labs Pvt. Ltd.</td></tr><tr><th>Amount</th><td><b>₹48,500.00</b></td></tr><tr><th>Invoice</th><td>INV-2041</td></tr><tr><th>Settled to</th><td>Northstar Bank ••4821</td></tr></table><p>The funds will reach your bank within 1 working day.</p>`,
- attachments:[A.pdf("receipt-INV-2041.pdf",[{title:"Payment Receipt",sub:"PayNest - INV-2041",lines:[{row:["Payer","Orbit Labs Pvt. Ltd."]},{row:["Invoice","INV-2041"]},{row:["Amount","Rs. 48,500.00"]},{row:["Fees","Rs. 0.00"]},{row:["Status","Settled"]},{h:"Thank you"},"This receipt was generated for the Halo Mail demo."]}])],summary:["Orbit Labs paid ₹48,500 against invoice INV-2041.","Funds settle to the Northstar account within 1 working day."]}),
+ attachments:[A.pdf("receipt-INV-2041.pdf",[{title:"Payment Receipt",sub:"PayNest - INV-2041",lines:[{row:["Payer","Orbit Labs Pvt. Ltd."]},{row:["Invoice","INV-2041"]},{row:["Amount","Rs. 48,500.00"]},{row:["Fees","Rs. 0.00"]},{row:["Status","Settled"]},{h:"Thank you"},"This receipt was generated for the Infinite Mail demo."]}])],summary:["Orbit Labs paid ₹48,500 against invoice INV-2041.","Funds settle to the Northstar account within 1 working day."]}),
 mk({from:P.meera,subject:"Photos from the Coorg offsite",time:ago(60*5),starred:true,labels:["personal"],
  body:`<p>Hi team,</p><p>As promised, here are a few favourites from the offsite. The sunrise hike was worth the 5 AM alarm.</p><p>Full album is on the shared drive.</p><p>Meera</p>`,
  attachments:[A.img("sunrise-hike.jpg","sky","#FFB88C","#DE6262","Sunrise hike"),A.img("coffee-estate.jpg","sky","#A8E063","#2F7336","Coffee estate"),A.img("team-dinner.jpg","blob","#F7971E","#C33764","Team dinner"),A.img("misty-valley.jpg","sky","#C9D6FF","#7A8CC8","Misty valley")]}),
@@ -797,7 +803,7 @@ mk({from:P.kite,cat:"promotions",subject:"Goa from ₹2,999 this weekend only",t
  attachments:[A.img("goa-weekend.jpg","promo","#00C6FF","#0072FF","Goa ₹2,999|This weekend only")]}),
 mk({from:P.cloud,cat:"updates",subject:"Your October usage report",time:ago(60*20),
  body:`<p>Here's how your workspace used Cloudbase in October.</p><ul><li>Compute: 412 hours (up 8%)</li><li>Storage: 186 GB</li><li>Bandwidth: 1.2 TB</li></ul><p>The full report and raw CSV are attached.</p>`,
- attachments:[A.pdf("usage-october.pdf",[{title:"Usage Report - October",sub:"Cloudbase workspace: halo-prod",lines:[{bar:72,label:"Compute"},{bar:46,label:"Storage"},{bar:58,label:"Bandwidth"},{bar:23,label:"Functions"},{h:"Highlights"},"Compute grew 8% month on month.","No incidents or downtime recorded."]}]),A.text("usage-october.csv","service,unit,usage,change\ncompute,hours,412,+8%\nstorage,GB,186,+3%\nbandwidth,TB,1.2,+11%\nfunctions,M calls,23.4,-2%")]}),
+ attachments:[A.pdf("usage-october.pdf",[{title:"Usage Report - October",sub:"Cloudbase workspace: infinite-prod",lines:[{bar:72,label:"Compute"},{bar:46,label:"Storage"},{bar:58,label:"Bandwidth"},{bar:23,label:"Functions"},{h:"Highlights"},"Compute grew 8% month on month.","No incidents or downtime recorded."]}]),A.text("usage-october.csv","service,unit,usage,change\ncompute,hours,412,+8%\nstorage,GB,186,+3%\nbandwidth,TB,1.2,+11%\nfunctions,M calls,23.4,-2%")]}),
 mk({from:P.kabir,subject:"Contract draft v3 for review",time:ago(60*26),important:true,labels:["clients"],
  body:`<p>Hi Aanya,</p><p>Attached is v3 of the services agreement with your edits from last week. I changed the payment terms to net 30 and tightened the IP clause in section 7.</p><p>Let me know if you're happy and I'll send it for e-signature.</p><p>Best,<br>Kabir Shah<br>Shah Legal</p>`,
  attachments:[A.file("services-agreement-v3.docx",248000),A.file("redline-summary.xlsx",64000)]}),
@@ -806,7 +812,7 @@ mk({from:P.shop,cat:"transactions",subject:"Your order #KX-88213 has shipped",ti
 mk({from:P.dev,subject:"Lunch tomorrow?",time:ago(60*33),unread:true,body:`<p>Thai place near the office, 1 PM? I owe you one for the deck review.</p>`,smart:["Yes, 1 PM works!","Can we do 1:30?","Not tomorrow, Friday?"]}),
 mk({from:P.page,cat:"promotions",subject:"Templates that write your weekly review",time:ago(60*44),body:`<p>Meet <b>Review Kit</b>: 12 new templates that pull your week's tasks into a tidy summary.</p><p><a class="cta" href="#">Try the templates</a></p>`}),
 mk({from:P.link,cat:"social",subject:"Priya Nair accepted your invitation",time:ago(60*50),unread:true,body:`<p>You and Priya Nair are now connected. Say hello and see what she's working on.</p>`}),
-mk({from:P.shot,cat:"social",subject:"Your shot \"Halo inbox\" got 1,240 views",time:ago(60*70),body:`<p>Your shot is trending in <b>Product Design</b> this week, with 1,240 views and 186 likes.</p>`}),
+mk({from:P.shot,cat:"social",subject:"Your shot \"Infinite inbox\" got 1,240 views",time:ago(60*70),body:`<p>Your shot is trending in <b>Product Design</b> this week, with 1,240 views and 186 likes.</p>`}),
 mk({from:P.sec,cat:"updates",subject:"New sign-in on Chrome, Windows",time:ago(60*76),body:`<p>We noticed a new sign-in to your account.</p><table><tr><th>Device</th><td>Chrome on Windows</td></tr><tr><th>Location</th><td>Pune, India</td></tr></table><p>If this was you, there's nothing to do.</p>`}),
 mk({from:P.bank,cat:"transactions",subject:"Your October statement is ready",time:ago(60*24*3),labels:["finance"],body:`<p>Your statement for account ••4821 is ready. Closing balance: <b>₹2,14,380.55</b>.</p>`,
  attachments:[A.pdf("statement-oct.pdf",[{title:"Account Statement - October",sub:"Northstar Bank - account ending 4821",lines:[{row:["Opening balance","Rs. 1,92,410.20"]},{row:["Credits","Rs. 98,500.00"]},{row:["Debits","Rs. 76,529.65"]},{row:["Closing balance","Rs. 2,14,380.55"]},{h:"Spending mix"},{bar:38,label:"Rent and bills"},{bar:24,label:"Food"},{bar:17,label:"Travel"}]}])]}),
@@ -814,7 +820,7 @@ mk({from:P.stream,cat:"promotions",subject:"3 months of Premium for ₹99",time:
 mk({from:P.sana,subject:"Your Lisbon itinerary",time:ago(60*24*4),starred:true,labels:["travel"],
  body:`<p>Olá Aanya!</p><p>Your Lisbon trip is all set. The itinerary is attached, including the Sintra day trip and the fado dinner on Saturday.</p><p>Boarding passes will come 24 hours before departure.</p><p>Boa viagem,<br>Sana</p>`,
  attachments:[A.pdf("lisbon-itinerary.pdf",[{title:"Lisbon - 5 Day Itinerary",sub:"WanderDesk Travel",lines:[{row:["Day 1","Arrive, Alfama walk"]},{row:["Day 2","Belem and LX Factory"]},{row:["Day 3","Sintra day trip"]},{row:["Day 4","Cascais beach"]},{row:["Day 5","Fado dinner, depart"]},{h:"Hotel"},"Casa do Rio, Rua das Flores 28, Lisbon"]}]),A.img("lisbon-tram.jpg","sky","#F6D365","#FDA085","Tram 28")]}),
-mk({from:P.halo,folder:"archive",subject:"Welcome to Halo Mail",time:ago(60*24*12),body:`<p>Hi Aanya, welcome aboard.</p><p>Press <b>C</b> to compose, <b>/</b> to search and <b>?</b> to see every shortcut.</p>`}),
+mk({from:P.halo,folder:"archive",subject:"Welcome to Infinite Mail",time:ago(60*24*12),body:`<p>Hi Aanya, welcome aboard.</p><p>Press <b>C</b> to compose, <b>/</b> to search and <b>?</b> to see every shortcut.</p>`}),
 mk({folder:"sent",from:ME,to:[P.riya],subject:"Re: Moodboard feedback",time:ago(60*28),body:`<p>Hi Riya,</p><p>Love direction B. The warm gradients feel right for launch. Attaching my notes on the mood board.</p><p>Aanya</p>`,attachments:[A.img("moodboard-notes.jpg","blob","#8E2DE2","#FF6A88","Moodboard notes")]}),
 mk({folder:"sent",from:ME,to:[P.team],subject:"Sprint 24 notes",time:ago(60*24*2),body:`<p>Team, notes from today's sprint review are attached. Great work on the attachment previews.</p>`,attachments:[A.pdf("sprint-24-notes.pdf",[{title:"Sprint 24 - Review Notes",lines:[{h:"Shipped"},"Attachment previews for images and PDFs","Swipe actions on mobile",{h:"Next"},"AI summaries in reader","Label management"]}])]}),
 mk({folder:"sent",from:ME,to:[P.kabir],subject:"Signed NDA",time:ago(60*24*6),body:`<p>Hi Kabir, signed copy attached. Thanks!</p>`,attachments:[A.file("nda-signed.pdf.zip",182000)]}),
@@ -881,7 +887,7 @@ let prevCounts={};
 function isDark(){const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches}
 function renderSidebar(){
   const c=counts();
-  let h=`<div class="brand">${LOGO}<div class="brand-name">Halo <em>mail</em></div><span style="flex:1"></span><button class="icon-btn only-m" data-act="drawer-close" aria-label="Close menu">${ic("x")}</button></div>
+  let h=`<div class="brand">${LOGO}<div class="brand-name">Infinite <em>mail</em></div><span style="flex:1"></span><button class="icon-btn only-m" data-act="drawer-close" aria-label="Close menu">${ic("x")}</button></div>
   <button class="btn compose-btn" data-act="compose">${ic("square-pen",18)}<span>Compose</span><kbd>C</kbd></button><nav class="nav" id="nav"><div class="nav-pill" id="nav-pill"></div>`;
   for(const f of FOLDERS){if(f.sep){h+=`<div class="nav-sep">${f.sep}</div>`;continue}const n=c[f.id]||0;
     h+=`<button class="nav-item ${S.view===f.id&&!S.q?"on":""}" data-act="nav" data-view="${f.id}" title="${f.name}${n?" ("+n+")":""}">${ic(f.icon)}<span>${f.name}</span>${n?`<b class="count ${f.id==="drafts"||f.id==="spam"||CATS.includes(f.id)?"muted":""}" data-k="${f.id}">${n}</b>`:""}</button>`}
@@ -923,7 +929,7 @@ function rowHtml(m,i,anim){
     <button class="star ${m.starred?"on":""}" data-act="star" data-id="${m.id}" aria-label="${m.starred?"Unstar":"Star"}" aria-pressed="${m.starred}">${ic("star",17)}</button>
   </div></div>`;
 }
-const EMPTY={inbox:["inbox","You're all caught up","New mail will land here. Try Refresh to see a new message arrive."],starred:["star","No starred mail","Star a message to keep it close."],important:["flag","Nothing important","Messages you mark as important show up here."],sent:["send","No sent mail","Messages you send will appear here."],drafts:["pencil-line","No drafts","Start writing and Halo saves as you go."],spam:["shield-check","No spam","Halo is keeping the junk out."],trash:["trash-2","Trash is empty","Deleted messages stay here for 30 days."],search:["search","No matches","Try a name, a subject or a file name."]};
+const EMPTY={inbox:["inbox","You're all caught up","New mail will land here. Try Refresh to see a new message arrive."],starred:["star","No starred mail","Star a message to keep it close."],important:["flag","Nothing important","Messages you mark as important show up here."],sent:["send","No sent mail","Messages you send will appear here."],drafts:["pencil-line","No drafts","Start writing and Infinite saves as you go."],spam:["shield-check","No spam","Infinite is keeping the junk out."],trash:["trash-2","Trash is empty","Deleted messages stay here for 30 days."],search:["search","No matches","Try a name, a subject or a file name."]};
 function emptyHtml(){const e=S.q?EMPTY.search:EMPTY[S.view]||["mails","Nothing here","No messages match this view yet."];return `<div class="empty"><div class="ill">${ic(e[0],36,1.6)}</div><h3>${e[1]}</h3><p>${e[2]}</p></div>`}
 function renderList(anim){
   const arr=viewMails();const c=counts();
