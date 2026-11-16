@@ -2,7 +2,7 @@
 
 A clickable mailbox UI/UX concept. It's a static demo built to pitch the design: there's no backend, and nothing is really sent.
 
-**Live demo:** https://iam-abhijeet.github.io/halo-mail/
+**Live demo:** https://iam-abhijeet.github.io/infinite-mail/
 
 ## What you can try
 
