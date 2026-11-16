@@ -14,6 +14,7 @@ A clickable mailbox UI/UX concept. It's a static demo built to pitch the design:
 - **Collapsible sidebar:** shrinks to icons with count badges (button at the bottom, or press `[`)
 - **Attachment previews:** images (zoom and pan), PDFs rendered page by page, CSV and text files, plus file cards for Word, Excel and zip files
 - **Compose:** recipient chips with contact suggestions, Cc and Bcc, a formatting toolbar, links, emoji and "Help me write"
+- **Smart compose:** grey suggestions while you type (greetings with the recipient's name, common phrases). Press Tab or → to accept, or tap the suggestion
 - **Attachments in compose:** browse, drag and drop, or paste files, with live thumbnails and upload progress
 - **Drafts:** saved automatically. Sending plays a send animation and offers Undo.
 - **Actions:** archive, delete, restore, delete forever, spam / not spam, move, mark read or unread, bulk select and empty trash
